@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videoaula: Demografia</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #fdf6fb; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            color: #333; 
+        }
+        .nav-back { 
+            align-self: flex-start; 
+            margin-bottom: 20px; 
+            text-decoration: none; 
+            background: #8e44ad; 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
+        }
+        .nav-back:hover { 
+            background: #732d91; 
+            transform: translateY(-2px);
+        }
+        .container { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(142, 68, 173, 0.1); 
+            max-width: 900px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            text-align: center; 
+            border-top: 6px solid #8e44ad;
+        }
+        h1 { color: #8e44ad; margin-top: 0; font-size: 2em; }
+        p { color: #7f8c8d; margin-bottom: 25px; font-size: 1.1em;}
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: #000;
+        }
+        
+        video { 
+            width: 100%; 
+            display: block;
+            outline: none; 
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-back">&#8592; Voltar ao Menu</a>
+    
+    <div class="container">
+        <h1>▶️ Videoaula: Dinâmica Populacional</h1>
+        <p>Aprofunde os seus conhecimentos assistindo a esta explicação visual sobre o comportamento e a estrutura da população.</p>
+        
+        <div class="video-wrapper">
+            <video controls>
+                <source src="video_demografia.mp4" type="video/mp4">
+                Seu navegador não suporta a tag de vídeo.
+            </video>
+        </div>
+    </div>
+</body>
+</html>

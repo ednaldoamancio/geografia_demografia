@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mapa Mental Interativo: Demografia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdf6fb 0%, #e8daef 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Botão de Voltar */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            text-decoration: none;
+            background: #8e44ad;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
+            transition: all 0.3s ease;
+        }
+        .nav-back:hover { background: #732d91; transform: translateY(-2px); }
+
+        .title-container { text-align: center; margin-bottom: 40px; }
+        h1 { color: #4a0e4e; margin: 0; font-size: 2em; text-shadow: 1px 1px 2px rgba(0,0,0,0.05); }
+        p.subtitle { color: #8e44ad; font-weight: 500; margin-top: 5px; }
+
+        /* Estrutura Central do Mapa */
+        .mindmap-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Nó Central (Raiz) */
+        .core-node {
+            background: linear-gradient(135deg, #8e44ad, #ff758c);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(255, 117, 140, 0.3);
+            z-index: 10;
+            position: relative;
+            margin-bottom: 30px;
+            border: 3px solid white;
+        }
+
+        /* Container das Ramificações */
+        .branches-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+        }
+
+        /* Linha vertical conectora escondida no mobile, visível no tablet/pc se usarmos grid */
+        @media (min-width: 768px) {
+            .branches-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+            }
+        }
+
+        /* Estilo de cada Ramo Principal */
+        .branch {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-left: 6px solid;
+            transition: all 0.3s ease;
+        }
+
+        /* Cores temáticas para cada ramo */
+        .branch-1 { border-color: #3498db; }
+        .branch-2 { border-color: #e74c3c; }
+        .branch-3 { border-color: #2ecc71; }
+        .branch-4 { border-color: #f1c40f; }
+        .branch-5 { border-color: #9b59b6; }
+
+        /* Cabeçalho do Ramo (Clicável) */
+        .branch-header {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2c3e50;
+            background: #ffffff;
+            transition: background 0.3s;
+        }
+        .branch-header:hover { background: #fdfdfd; }
+        
+        .branch-header i.chevron {
+            transition: transform 0.4s ease;
+            color: #8e44ad;
+        }
+        
+        .branch.active .branch-header i.chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Área de conteúdo do Ramo (Sub-nós) */
+        .branch-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+            background: #fafafa;
+        }
+        
+        .branch.active .branch-content {
+            max-height: 1000px; /* Valor alto para permitir a expansão */
+            transition: max-height 0.7s ease-in-out;
+        }
+
+        /* Sub-tópicos */
+        .sub-nodes {
+            padding: 15px 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sub-node {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.5;
+            border: 1px solid #eee;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .sub-node strong { color: #8e44ad; }
+        
+        /* Ajuste do ícone no título */
+        .icon-title { width: 30px; text-align: center; margin-right: 10px; color: inherit; }
+        .branch-1 .icon-title { color: #3498db; }
+        .branch-2 .icon-title { color: #e74c3c; }
+        .branch-3 .icon-title { color: #2ecc71; }
+        .branch-4 .icon-title { color: #f39c12; }
+        .branch-5 .icon-title { color: #9b59b6; }
+
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+    
+    <div class="title-container">
+        <h1>Mapa Mental Interativo</h1>
+        <p class="subtitle">Toque nos cartões para expandir os conceitos</p>
+    </div>
+
+    <div class="mindmap-wrapper">
+        
+        <div class="core-node">
+            <i class="fas fa-globe-americas"></i> Demografia e População
+        </div>
+
+        <div class="branches-container">
+            
+            <div class="branch branch-1">
+                <div class="branch-header" onclick="toggleBranch(this)">
+                    <div><i class="fas fa-chart-pie icon-title"></i> 1. Conceitos Fundamentais</div>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-nodes">
+                        <div class="sub-node"><strong>Populoso vs Povoado:</strong> Populoso = População Absoluta alta (muita gente). Povoado = Densidade Demográfica alta (muita gente por km²).</div>
+                        <div class="sub-node"><strong>Crescimento Vegetativo:</strong> Diferença matemática entre a Taxa de Natalidade e a Taxa de Mortalidade.</div>
+                        <div class="sub-node"><strong>Taxa de Fecundidade:</strong> Estimativa do número médio de filhos que uma mulher terá na sua vida reprodutiva.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="branch branch-2">
+                <div class="branch-header" onclick="toggleBranch(this)">
+                    <div><i class="fas fa-book-open icon-title"></i> 2. Teorias Populacionais</div>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-nodes">
+                        <div class="sub-node"><strong>Malthusiana (Séc. 18):</strong> A população cresce em progressão geométrica e os alimentos em progressão aritmética. O mundo passaria fome.</div>
+                        <div class="sub-node"><strong>Neomalthusiana (Pós-Guerra):</strong> A alta natalidade é a causa da pobreza. Solução: Controlo rígido de natalidade e anticoncecionais.</div>
+                        <div class="sub-node"><strong>Reformista / Marxista:</strong> A pobreza é a causa da alta natalidade (e não o inverso). Solução: Distribuição de riqueza, educação e reformas sociais.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="branch branch-3">
+                <div class="branch-header" onclick="toggleBranch(this)">
+                    <div><i class="fas fa-arrow-trend-down icon-title"></i> 3. Transição Demográfica</div>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-nodes">
+                        <div class="sub-node"><strong>Fase 1 (Pré-Industrial):</strong> Altíssima natalidade e altíssima mortalidade. Baixo crescimento.</div>
+                        <div class="sub-node"><strong>Fase 2 (Explosão Demográfica):</strong> Mortalidade despenca (vacinas, saneamento), mas natalidade continua alta. População explode.</div>
+                        <div class="sub-node"><strong>Fase 3 (Desaceleração):</strong> A natalidade começa a cair (urbanização, mulher no mercado de trabalho). O crescimento abranda.</div>
+                        <div class="sub-node"><strong>Fase 4 (Estabilização):</strong> Baixa natalidade e baixa mortalidade. A população envelhece.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="branch branch-4">
+                <div class="branch-header" onclick="toggleBranch(this)">
+                    <div><i class="fas fa-layer-group icon-title"></i> 4. Estrutura Etária</div>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-nodes">
+                        <div class="sub-node"><strong>Pirâmide: Base:</strong> Representa os jovens (alta natalidade). <strong>Topo:</strong> Representa os idosos (esperança de vida).</div>
+                        <div class="sub-node"><strong>PEA e PEI:</strong> PEA = População Economicamente Ativa (trabalhadores). PEI = Inativos (crianças, idosos).</div>
+                        <div class="sub-node"><strong>Bónus Demográfico:</strong> Momento económico favorável em que há mais pessoas na PEA (a trabalhar) do que pessoas dependentes.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="branch branch-5">
+                <div class="branch-header" onclick="toggleBranch(this)">
+                    <div><i class="fas fa-plane-departure icon-title"></i> 5. Migrações e Dinâmicas</div>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-nodes">
+                        <div class="sub-node"><strong>Saldo Migratório:</strong> Número de Imigrantes (quem entra) menos o número de Emigrantes (quem sai).</div>
+                        <div class="sub-node"><strong>Pendular:</strong> Movimento diário de vai-e-vem (casa-trabalho) entre cidades vizinhas.</div>
+                        <div class="sub-node"><strong>Transumância:</strong> Migração sazonal (ligada às estações ou colheitas).</div>
+                        <div class="sub-node"><strong>Fuga de Cérebros:</strong> Saída de cientistas e mão de obra muito qualificada de países pobres para países ricos.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleBranch(element) {
+            // Seleciona a div "branch" pai do cabeçalho clicado
+            const parentBranch = element.parentElement;
+            
+            // Verifica se este ramo já está ativo
+            const isActive = parentBranch.classList.contains('active');
+            
+            // Se quisermos que apenas 1 abra de cada vez, fechamos todos primeiro:
+            const allBranches = document.querySelectorAll('.branch');
+            allBranches.forEach(branch => {
+                branch.classList.remove('active');
+            });
+
+            // Se não estava ativo antes, nós ativamos agora (abre)
+            if (!isActive) {
+                parentBranch.classList.add('active');
+                
+                // Rolar suavemente para focar no conteúdo aberto (útil para telemóveis pequenos)
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

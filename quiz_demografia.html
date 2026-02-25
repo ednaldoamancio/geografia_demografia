@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz ENEM: Demografia e Estudos Populacionais</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fdf6fb; /* Fundo suave a combinar com o tema */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .nav-back {
+            align-self: flex-start;
+            margin-bottom: 20px;
+            text-decoration: none;
+            background: #8e44ad; /* Roxo do tema */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .nav-back:hover { background: #732d91; }
+        
+        .container {
+            background-color: #fff;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #8e44ad;
+            margin-top: 0;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #ff758c;
+            padding-bottom: 10px;
+        }
+        .question-box {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .question-box.active { display: block; animation: fadeIn 0.5s; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            background-color: #f8f9fa;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e9ecef;
+            font-size: 1.05em;
+        }
+        .options li:hover { background-color: #f1e6f5; border-color: #d2b4de; }
+        .options li.selected {
+            background-color: #8e44ad;
+            color: white;
+            border-color: #732d91;
+            font-weight: bold;
+        }
+        
+        .btn {
+            background-color: #ff758c;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:hover { background-color: #ff5270; transform: translateY(-2px); }
+        .btn:disabled { background-color: #d1d5db; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        #result-screen, #ranking-screen, #start-screen { display: none; text-align: center; }
+        
+        .score-display {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #8e44ad;
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 15px;
+            width: 100%;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            border: 2px solid #d2b4de;
+            border-radius: 8px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input[type="text"]:focus { border-color: #8e44ad; }
+        
+        .ranking-list {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+        .ranking-list li {
+            background: #fdf6fb;
+            margin: 8px 0;
+            padding: 15px;
+            border-left: 6px solid #8e44ad;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff758c, #8e44ad);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="nav-back">&#8592; Voltar ao Menu</a>
+
+    <div class="container">
+        <h1>📊 Desafio Demografia: Nota 1000!</h1>
+        
+        <div id="start-screen" style="display: block;">
+            <p style="font-size: 1.1em; color: #555;">Bem-vindo ao simulado do 1º Bimestre. São 20 questões sobre teorias demográficas, indicadores, pirâmides etárias e migrações.</p>
+            <p><strong>Regras:</strong> Cada questão vale 50 pontos. O objetivo da sua equipe é alcançar os 1000 pontos. Pode refazer o teste as vezes que forem necessárias!</p>
+            <button class="btn" onclick="startQuiz()">Iniciar Simulado</button>
+            <button class="btn" style="background-color: #34495e; margin-top: 15px;" onclick="showRankingOnly()">Ver Diário de Notas (Ranking)</button>
+        </div>
+        
+        <div id="quiz-screen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+            <h3 id="question-counter" style="color: #8e44ad;">Questão 1 de 20</h3>
+            
+            <div id="questions-container"></div>
+            
+            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>Confirmar Resposta</button>
+        </div>
+        
+        <div id="result-screen">
+            <h2>Fim do Simulado!</h2>
+            <p>A sua pontuação final (estilo ENEM) foi:</p>
+            <div class="score-display"><span id="final-score">0</span> / 1000</div>
+            
+            <p>Digite o seu NOME e o nome da sua EQUIPE para registar no diário do professor:</p>
+            <input type="text" id="student-name" placeholder="Ex: João Silva - Equipe Delta">
+            <button class="btn" onclick="saveScore()">Salvar Pontuação</button>
+            <button class="btn" style="background-color: #95a5a6; margin-top: 10px;" onclick="location.reload()">Tentar Novamente</button>
+        </div>
+        
+        <div id="ranking-screen">
+            <h2>Diário de Notas - Demografia</h2>
+            <p>As notas estão salvas de forma segura neste aparelho.</p>
+            <ul class="ranking-list" id="ranking-list"></ul>
+            <button class="btn" onclick="location.reload()">Voltar ao Início</button>
+        </div>
+    </div>
+
+<script>
+    const questionsData = [
+        {
+            q: "A diferença conceitual entre um país 'populoso' e um país 'povoado' reside, respetivamente, na análise da:",
+            options: ["Taxa de fecundidade e taxa de mortalidade.", "População absoluta e densidade demográfica (população relativa).", "População urbana e população rural.", "População economicamente ativa e inativa.", "Taxa de imigração e taxa de emigração."],
+            a: 1
+        },
+        {
+            q: "O Crescimento Vegetativo (ou Natural) de uma população é obtido através de qual operação matemática?",
+            options: ["A soma da imigração com a natalidade.", "A divisão da população total pela área do território.", "A diferença entre a taxa de natalidade e a taxa de mortalidade.", "A multiplicação da taxa de fecundidade pela expectativa de vida.", "A diferença entre imigrantes e emigrantes (saldo migratório)."],
+            a: 2
+        },
+        {
+            q: "Em Demografia, a Taxa de Fecundidade é um indicador que representa:",
+            options: ["O número de crianças que morrem antes de completar 1 ano de vida.", "O número médio de filhos que uma mulher teria até o fim de seu período reprodutivo.", "O total de nascimentos registrados em um país durante uma década.", "A quantidade de idosos acima de 65 anos em uma população.", "O tempo médio que um indivíduo nascido naquele ano espera viver."],
+            a: 1
+        },
+        {
+            q: "A Teoria Malthusiana, formulada no século XVIII por Thomas Malthus, causou grande impacto ao afirmar que:",
+            options: ["O uso de métodos contraceptivos resolveria rapidamente a pobreza mundial.", "A população cresceria em progressão geométrica e a produção de alimentos em progressão aritmética, gerando fome.", "A superpopulação era consequência do subdesenvolvimento, e não a causa dele.", "A tecnologia agrícola sempre seria capaz de acompanhar o crescimento populacional.", "A distribuição igualitária de terras seria a solução para a falta de alimentos globais."],
+            a: 1
+        },
+        {
+            q: "Após a Segunda Guerra Mundial, surgiu a Teoria Neomalthusiana. Qual era o seu argumento principal e a solução proposta?",
+            options: ["A população rica consumia demais; a solução seria reduzir o consumo.", "O alto crescimento populacional nos países pobres era a causa da miséria; a solução seria o controle rigoroso da natalidade.", "A miséria gerava muitos filhos; a solução seria investir em educação e saúde pública.", "O problema era a falta de moradia; a solução seria a construção de metrópoles.", "As migrações internacionais causavam pobreza; a solução seria fechar fronteiras."],
+            a: 1
+        },
+        {
+            q: "A Teoria Reformista (ou Marxista) contrapõe-se diretamente à visão Neomalthusiana ao defender que:",
+            options: ["O Estado deve impor limites rígidos de filhos por família.", "A fome é um fenômeno natural e irreversível da biologia humana.", "A superpopulação é a causa principal da destruição ambiental na Europa.", "O rápido crescimento demográfico é consequência da pobreza e da má distribuição de renda, e não a causa.", "Somente a redução drástica da população global garantirá o avanço do capitalismo."],
+            a: 3
+        },
+        {
+            q: "O processo de 'Transição Demográfica' é caracterizado historicamente pela:",
+            options: ["Passagem de uma sociedade rural com altas taxas de natalidade e mortalidade para uma sociedade urbana com baixas taxas de natalidade e mortalidade.", "Migração em massa de populações de países centrais para países periféricos.", "Redução da expectativa de vida associada ao aumento das taxas de fecundidade nas metrópoles.", "Estagnação permanente da população, impedindo o envelhecimento populacional.", "Elevação simultânea e incontrolável das taxas de mortalidade infantil e natalidade."],
+            a: 0
+        },
+        {
+            q: "Na Fase 2 da Transição Demográfica, ocorre um fenômeno conhecido como 'Explosão Demográfica'. Qual fator desencadeia essa explosão?",
+            options: ["O aumento drástico do número de imigrantes europeus.", "A queda vertiginosa da taxa de natalidade, enquanto a mortalidade aumenta.", "A forte queda da taxa de mortalidade (avanços médicos e sanitários), enquanto a natalidade se mantém elevada.", "O declínio da agricultura e o retorno em massa de famílias para o campo.", "A introdução de métodos contraceptivos que aumentam indiretamente a fecundidade."],
+            a: 2
+        },
+        {
+            q: "Ao analisar a Pirâmide Etária de um país subdesenvolvido (fase inicial de transição), espera-se encontrar graficamente:",
+            options: ["Um formato cilíndrico perfeito, sem variação entre idades.", "Uma base muito larga (muitos jovens) e um topo estreito (poucos idosos).", "Uma base estreita e um topo extremamente largo, caracterizando uma população geriátrica.", "Uma ausência total de crianças, representada por uma base inexistente.", "O formato de uma ampulheta ou barril."],
+            a: 1
+        },
+        {
+            q: "O envelhecimento populacional, refletido no alargamento do topo da pirâmide etária de países como o Brasil, traz como principal desafio socioeconômico:",
+            options: ["O fechamento excessivo de escolas de ensino médio devido à falta de professores.", "A necessidade de importar tecnologia agrícola primária.", "O aumento exponencial de doenças contagiosas infantis.", "A grande pressão sobre o sistema de previdência social (aposentadorias) e os serviços de saúde.", "O excedente de mão de obra jovem não qualificada (desemprego estrutural)."],
+            a: 3
+        },
+        {
+            q: "O conceito de 'Bônus Demográfico' (ou Janela Demográfica) refere-se a um momento histórico vantajoso para a economia de um país em que:",
+            options: ["A população de crianças em idade pré-escolar atinge o seu ápice histórico.", "O número de idosos supera pela primeira vez o número de adultos trabalhadores.", "A proporção de pessoas em idade ativa (PEA) é superior à proporção de dependentes (crianças e idosos).", "Ocorre a extinção total da taxa de mortalidade infantil.", "O país recebe um número massivo de refugiados de guerra dispostos a trabalhar."],
+            a: 2
+        },
+        {
+            q: "A População Economicamente Ativa (PEA) é um indicador essencial para medir a força de trabalho. Esse grupo é composto por:",
+            options: ["Exclusivamente pessoas que possuem carteira de trabalho assinada.", "Somente servidores públicos e empresários.", "Crianças, estudantes em dedicação exclusiva e donas de casa.", "Pessoas que estão trabalhando (ocupadas) e as que estão procurando emprego ativamente (desempregadas).", "Apenas a parcela da população rural envolvida na colheita."],
+            a: 3
+        },
+        {
+            q: "No estudo das migrações, a diferença matemática entre a quantidade de pessoas que entram (imigrantes) e as que saem (emigrantes) de um território é chamada de:",
+            options: ["Êxodo populacional.", "Transumância.", "Saldo migratório.", "Crescimento vegetativo.", "Densidade migratória absoluta."],
+            a: 2
+        },
+        {
+            q: "O intenso movimento migratório interno que ocorreu no Brasil a partir da década de 1950, marcado pela transferência massiva de populações do campo para as cidades, é denominado:",
+            options: ["Migração Pendular.", "Êxodo Rural.", "Fuga de Cérebros.", "Transumância.", "Migração de Retorno."],
+            a: 1
+        },
+        {
+            q: "O deslocamento diário (vai-e-vem) de milhares de trabalhadores e estudantes que residem em municípios da região metropolitana e viajam à capital, voltando no fim do dia, é classificado como:",
+            options: ["Êxodo Urbano.", "Migração Sazonal.", "Migração Pendular.", "Diaspora.", "Nomadismo moderno."],
+            a: 2
+        },
+        {
+            q: "No contexto migratório, a 'Fuga de Cérebros' (Brain Drain) causa grande prejuízo a países em desenvolvimento. Esse termo refere-se a:",
+            options: ["Fuga de prisioneiros políticos das fronteiras de um país ditatorial.", "Emigração de trabalhadores rurais em busca de terras férteis em nações vizinhas.", "Retorno em massa de estudantes que fracassaram em intercâmbios internacionais.", "A perda de profissionais altamente qualificados e pesquisadores para países desenvolvidos.", "A saída temporária de operários para a construção civil durante megaeventos esportivos."],
+            a: 3
+        },
+        {
+            q: "Migração temporária, associada aos ciclos da natureza ou atividades econômicas específicas (como o corte de cana-de-açúcar), onde o trabalhador vai, passa uma temporada e retorna à origem. Trata-se da:",
+            options: ["Transumância (ou migração sazonal).", "Macrocefalia urbana.", "Refúgio climático.", "Migração pendular.", "Gentrificação."],
+            a: 0
+        },
+        {
+            q: "O órgão federal brasileiro responsável por planejar e executar, a cada 10 anos, o Censo Demográfico para contabilizar a população e as suas características é o:",
+            options: ["MEC - Ministério da Educação.", "IPEA - Instituto de Pesquisa Econômica Aplicada.", "IBGE - Instituto Brasileiro de Geografia e Estatística.", "INCRA - Instituto Nacional de Colonização e Reforma Agrária.", "FUNAI - Fundação Nacional dos Povos Indígenas."],
+            a: 2
+        },
+        {
+            q: "Historicamente, como se caracteriza a distribuição espacial da população brasileira no território nacional?",
+            options: ["Completamente homogênea, com o mesmo número de pessoas em todos os estados.", "Irregular e concentrada, com grande aglomeração populacional na faixa litorânea e na região Sudeste.", "Concentrada predominantemente no interior da Amazônia devido aos ciclos da borracha.", "Uniforme ao longo das fronteiras internacionais do Norte e Centro-Oeste.", "Decrescente nas áreas litorâneas e crescente apenas no semiárido nordestino."],
+            a: 1
+        },
+        {
+            q: "A queda progressiva da Taxa de Fecundidade no Brasil e no mundo a partir da segunda metade do século XX está intimamente ligada a:",
+            options: ["Aumento da influência das crenças religiosas tradicionais nas decisões familiares.", "Retorno maciço da população feminina para o trabalho exclusivamente doméstico rural.", "Urbanização, inserção da mulher no mercado de trabalho e difusão de métodos contraceptivos.", "Intervenção governamental rigorosa proibindo casamentos precoces.", "Guerra Fria e a limitação global de produção de alimentos infantis."],
+            a: 2
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let selectedOption = null;
+
+    const quizContainer = document.getElementById('questions-container');
+    const nextBtn = document.getElementById('next-btn');
+
+    function buildQuiz() {
+        questionsData.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = `question-box ${index === 0 ? 'active' : ''}`;
+            div.id = `q-${index}`;
+            
+            let optionsHtml = '';
+            item.options.forEach((opt, optIndex) => {
+                optionsHtml += `<li onclick="selectOption(${index}, ${optIndex}, this)">${opt}</li>`;
+            });
+
+            div.innerHTML = `
+                <h3 style="margin-bottom: 15px; line-height: 1.4;">${index + 1}. ${item.q}</h3>
+                <ul class="options">
+                    ${optionsHtml}
+                </ul>
+            `;
+            quizContainer.appendChild(div);
+        });
+    }
+
+    function startQuiz() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'block';
+        buildQuiz();
+        updateProgress();
+    }
+
+    function selectOption(qIndex, optIndex, element) {
+        const optionsList = element.parentElement.children;
+        for(let i=0; i<optionsList.length; i++) {
+            optionsList[i].classList.remove('selected');
+        }
+        element.classList.add('selected');
+        selectedOption = optIndex;
+        nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+        if(selectedOption === questionsData[currentQuestionIndex].a) {
+            score += 50; 
+        }
+
+        document.getElementById(`q-${currentQuestionIndex}`).classList.remove('active');
+        
+        currentQuestionIndex++;
+        selectedOption = null;
+        nextBtn.disabled = true;
+
+        if (currentQuestionIndex < questionsData.length) {
+            document.getElementById(`q-${currentQuestionIndex}`).classList.add('active');
+            document.getElementById('question-counter').innerText = `Questão ${currentQuestionIndex + 1} de 20`;
+            updateProgress();
+            
+            // Rola suavemente para o topo da pergunta
+            window.scrollTo({ top: document.querySelector('.container').offsetTop - 20, behavior: 'smooth' });
+        } else {
+            showResult();
+        }
+    }
+
+    function updateProgress() {
+        const percent = ((currentQuestionIndex) / questionsData.length) * 100;
+        document.getElementById('progress').style.width = percent + '%';
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('final-score').innerText = score;
+    }
+
+    function saveScore() {
+        const studentName = document.getElementById('student-name').value.trim();
+        if(!studentName) {
+            alert("Por favor, digite o seu nome e equipa para registar a nota!");
+            return;
+        }
+
+        const data = {
+            nome: studentName,
+            nota: score,
+            data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
+        };
+
+        // Usa a chave ESPECÍFICA de demografia para não apagar o histórico de climatologia
+        let ranking = JSON.parse(localStorage.getItem('demografia_ranking')) || [];
+        ranking.push(data);
+        ranking.sort((a, b) => b.nota - a.nota);
+        localStorage.setItem('demografia_ranking', JSON.stringify(ranking));
+        
+        alert("Nota gravada com sucesso no Diário do Professor!");
+        showRankingOnly();
+    }
+
+    function showRankingOnly() {
+        document.getElementById('start-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'none';
+        document.getElementById('ranking-screen').style.display = 'block';
+
+        const rankingList = document.getElementById('ranking-list');
+        rankingList.innerHTML = '';
+        
+        let ranking = JSON.parse(localStorage.getItem('demografia_ranking')) || [];
+        
+        if(ranking.length === 0) {
+            rankingList.innerHTML = '<li>Nenhuma nota registada neste aparelho ainda.</li>';
+        } else {
+            ranking.forEach((aluno, i) => {
+                let positionColor = i === 0 ? 'color: #f1c40f;' : (i === 1 ? 'color: #95a5a6;' : (i === 2 ? 'color: #d35400;' : 'color: #8e44ad;'));
+                let medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : `${i+1}º`));
+                
+                rankingList.innerHTML += `
+                    <li>
+                        <strong style="font-size: 1.1em; ${positionColor}">${medal} - ${aluno.nome}</strong> 
+                        <span style="text-align: right;">Nota: <strong style="font-size: 1.2em; color: #ff758c;">${aluno.nota}</strong><br><small style="color: #95a5a6;">${aluno.data}</small></span>
+                    </li>
+                `;
+            });
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast: Demografia</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #fdf6fb; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            color: #333; 
+        }
+        .nav-back { 
+            align-self: flex-start; 
+            margin-bottom: 20px; 
+            text-decoration: none; 
+            background: #8e44ad; 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
+        }
+        .nav-back:hover { 
+            background: #732d91; 
+            transform: translateY(-2px);
+        }
+        .container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(142, 68, 173, 0.1); 
+            text-align: center; 
+            max-width: 600px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            border-top: 6px solid #ff758c;
+        }
+        h1 { color: #8e44ad; margin-top: 0; font-size: 2em; }
+        p { color: #7f8c8d; line-height: 1.6; font-size: 1.1em; }
+        
+        /* Estilização do Player de Áudio */
+        audio { 
+            width: 100%; 
+            margin-top: 25px; 
+            outline: none; 
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        /* Ajuste de cores para navegadores Webkit (Chrome/Safari/Edge) */
+        audio::-webkit-media-controls-panel {
+            background-color: #f1e6f5;
+        }
+        
+        .icon { font-size: 4.5em; margin-bottom: 15px; display: block; color: #ff758c; text-shadow: 2px 2px 4px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="nav-back">&#8592; Voltar ao Menu</a>
+    
+    <div class="container">
+        <span class="icon">🎧</span>
+        <h1>Podcast Demográfico</h1>
+        <p>Ouça este resumo especial gerado com Inteligência Artificial. Perfeito para revisar as Teorias Populacionais e a Transição Demográfica enquanto você está no ônibus ou no intervalo do trabalho!</p>
+        
+        <audio controls controlsList="nodownload">
+            <source src="podcast_demografia.mp3" type="audio/mpeg">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+</body>
+</html>

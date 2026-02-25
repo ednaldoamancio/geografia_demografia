@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Demografia e Estudos Populacionais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'], },
+                    colors: {
+                        brand: { dark: '#4a0e4e', purple: '#8e44ad', pink: '#ff758c', light: '#fdf6fb' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #fdf6fb; touch-action: pan-y; }
+        .presentation-container { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        
+        .slide-frame {
+            width: 100%; height: 100%;
+            background: white; position: relative; overflow: hidden;
+        }
+        @media (min-width: 1024px) {
+            .slide-frame { max-width: 1280px; aspect-ratio: 16 / 9; height: auto; border-radius: 0.5rem; box-shadow: 0 25px 50px -12px rgba(142, 68, 173, 0.25); }
+        }
+
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; visibility: hidden; transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            background-color: #fdf6fb; overflow-y: auto; overflow-x: hidden;
+        }
+        .slide.active { opacity: 1; visibility: visible; z-index: 10; }
+        
+        .slide.active .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide.active .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .delay-100 { animation-delay: 0.1s; opacity: 0; }
+        .delay-200 { animation-delay: 0.2s; opacity: 0; }
+        .delay-300 { animation-delay: 0.3s; opacity: 0; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 45px; height: 45px;
+            font-size: 20px; color: #4a0e4e; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            z-index: 50; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .nav-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
+        .nav-prev { left: 10px; } .nav-next { right: 10px; }
+        @media (min-width: 768px) { .nav-prev { left: 20px; width: 50px; height: 50px; font-size: 24px; } .nav-next { right: 20px; width: 50px; height: 50px; font-size: 24px; } }
+        
+        .progress-bar { position: absolute; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #ff758c, #8e44ad); transition: width 0.3s; z-index: 50; }
+
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(142,68,173,0.2); }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d2b4de; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="absolute top-2 left-2 md:top-4 md:left-4 z-[100] flex gap-2 scale-90 md:scale-100 origin-top-left">
+    <a href="index.html" class="bg-brand-purple hover:bg-brand-dark text-white px-3 py-2 md:px-4 md:py-2 rounded-lg shadow-lg transition-colors flex items-center gap-2 text-xs md:text-sm font-bold no-underline">
+        <i class="fas fa-home"></i> Início
+    </a>
+</div>
+
+<div class="presentation-container">
+    <div class="slide-frame" id="presentation">
+        
+        <div class="slide active bg-gradient-to-br from-brand-light via-[#f3e5f5] to-[#e8daef]">
+            <div class="w-full h-full flex flex-col md:flex-row relative items-center justify-center p-6">
+                
+                <i class="fas fa-users absolute top-10 left-10 text-6xl md:text-9xl text-brand-purple opacity-10 transform -rotate-12"></i>
+                <i class="fas fa-globe-americas absolute bottom-10 right-10 text-6xl md:text-9xl text-brand-pink opacity-20 transform rotate-12"></i>
+                
+                <div class="text-center z-10 glass-panel py-8 px-6 md:py-12 md:px-16 rounded-3xl animate-fade-up shadow-2xl border-b-8 border-brand-pink">
+                    <h3 class="text-sm md:text-xl font-bold text-brand-pink tracking-widest uppercase mb-2">Geografia - 2ª Série</h3>
+                    <h1 class="text-3xl md:text-6xl font-extrabold text-brand-dark mb-4 tracking-tight leading-tight">DEMOGRAFIA E<br>ESTUDOS POPULACIONAIS</h1>
+                    <p class="text-sm md:text-lg text-slate-600 mt-4 max-w-lg mx-auto">
+                        Uma análise visual sobre o crescimento, a estrutura e a mobilidade da população mundial e brasileira.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide p-6 md:p-12 flex flex-col min-h-full pb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-brand-dark mb-8 text-center animate-fade-in mt-10 md:mt-0">O Mundo está Cheio ou Cheio Demais?</h2>
+            
+            <div class="flex-1 flex flex-col md:flex-row gap-6 md:gap-10 animate-fade-up w-full max-w-5xl mx-auto">
+                
+                <div class="flex-1 bg-white rounded-3xl shadow-xl p-8 flex flex-col items-center text-center border-t-8 border-brand-purple hover:transform hover:-translate-y-2 transition-transform">
+                    <div class="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center text-brand-purple text-4xl mb-6">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">POPULOSO</h3>
+                    <p class="text-brand-pink font-semibold mb-4 uppercase tracking-wider text-sm">População Absoluta</p>
+                    <p class="text-slate-600 text-sm md:text-base mb-6">
+                        Refere-se ao número total de habitantes de um território. Dizemos que um país é populoso quando tem <strong>muita gente</strong> no total.
+                    </p>
+                    <div class="mt-auto bg-slate-50 w-full p-4 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 block mb-1">Exemplo Clássico:</span>
+                        <strong class="text-brand-purple">China, Índia, EUA e Brasil.</strong>
+                    </div>
+                </div>
+
+                <div class="flex-1 bg-white rounded-3xl shadow-xl p-8 flex flex-col items-center text-center border-t-8 border-brand-pink hover:transform hover:-translate-y-2 transition-transform">
+                    <div class="w-20 h-20 rounded-full bg-pink-100 flex items-center justify-center text-brand-pink text-4xl mb-6">
+                        <i class="fas fa-people-group"></i>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-brand-dark mb-4">POVOADO</h3>
+                    <p class="text-brand-purple font-semibold mb-4 uppercase tracking-wider text-sm">População Relativa</p>
+                    <p class="text-slate-600 text-sm md:text-base mb-6">
+                        Refere-se à densidade demográfica (Habitantes / km²). Indica se a população está <strong>bem distribuída</strong> ou concentrada no espaço.
+                    </p>
+                    <div class="mt-auto bg-slate-50 w-full p-4 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 block mb-1">Exemplo Clássico:</span>
+                        <strong class="text-brand-pink">Mónaco, Singapura e Bangladesh.</strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide p-6 md:p-10 flex flex-col min-h-full pb-16 bg-white">
+            <h2 class="text-2xl md:text-4xl font-bold text-center text-brand-dark mb-6 md:mb-12 animate-fade-in mt-10 md:mt-0">Teorias Populacionais</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto animate-fade-up">
+                
+                <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-red-500 shadow flex flex-col">
+                    <i class="fas fa-skull-crossbones text-4xl text-red-400 mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Malthusiana <span class="text-xs font-normal text-slate-500">(Séc. XVIII)</span></h3>
+                    <p class="text-sm text-slate-600 mb-4">"A população cresce em Progressão Geométrica (PG) e os alimentos em Progressão Aritmética (PA)."</p>
+                    <div class="mt-auto bg-white p-3 rounded text-xs">
+                        <strong>Problema:</strong> Fome global.<br>
+                        <strong>Solução dele:</strong> Abstinência sexual e casamentos tardios.
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-brand-purple shadow flex flex-col delay-100">
+                    <i class="fas fa-pills text-4xl text-brand-purple mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Neomalthusiana <span class="text-xs font-normal text-slate-500">(Pós-2ª Guerra)</span></h3>
+                    <p class="text-sm text-slate-600 mb-4">"O excesso de população nos países pobres é a CAUSA do subdesenvolvimento e da miséria."</p>
+                    <div class="mt-auto bg-white p-3 rounded text-xs border border-purple-100">
+                        <strong>Problema:</strong> Pobreza pelo excesso de filhos.<br>
+                        <strong>Solução:</strong> Controlo rigoroso da natalidade (anticoncecionais).
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-emerald-500 shadow flex flex-col delay-200">
+                    <i class="fas fa-scale-balanced text-4xl text-emerald-500 mb-4"></i>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Reformista / Marxista</h3>
+                    <p class="text-sm text-slate-600 mb-4">"A superpopulação é a CONSEQUÊNCIA da pobreza e não a causa. A culpa é da má distribuição de riqueza."</p>
+                    <div class="mt-auto bg-white p-3 rounded text-xs border border-emerald-100">
+                        <strong>Problema:</strong> Desigualdade social.<br>
+                        <strong>Solução:</strong> Reformas sociais, educação e melhor distribuição de rendimentos.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide p-4 md:p-10 min-h-full flex flex-col items-center pb-16 bg-slate-50">
+            <h2 class="text-2xl md:text-4xl font-bold text-brand-dark mb-4 md:mb-6 text-center animate-fade-in mt-10 md:mt-0">O Modelo de Transição Demográfica</h2>
+            
+            <div class="bg-white p-4 md:p-6 rounded-2xl shadow-xl border border-slate-200 w-full max-w-5xl flex-1 flex flex-col animate-fade-up">
+                
+                <div class="flex flex-wrap justify-center gap-2 md:gap-6 mb-4">
+                    <span class="text-xs md:text-sm font-bold px-3 py-1 bg-blue-100 text-blue-800 rounded-full"><i class="fas fa-bed"></i> Natalidade</span>
+                    <span class="text-xs md:text-sm font-bold px-3 py-1 bg-red-100 text-red-800 rounded-full"><i class="fas fa-cross"></i> Mortalidade</span>
+                    <span class="text-xs md:text-sm font-bold px-3 py-1 bg-green-100 text-green-800 rounded-full"><i class="fas fa-arrow-trend-up"></i> Crescimento Vegetativo</span>
+                </div>
+
+                <div class="relative w-full flex-1 min-h-[250px] md:min-h-[350px]">
+                    <canvas id="transicaoChart"></canvas>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-2 text-center mt-4 text-[10px] md:text-sm">
+                    <div class="p-2 bg-slate-100 rounded"><strong>Fase 1:</strong> Pré-Industrial (Estável/Alta)</div>
+                    <div class="p-2 bg-orange-100 rounded text-orange-800"><strong>Fase 2:</strong> Explosão Demográfica</div>
+                    <div class="p-2 bg-blue-100 rounded text-blue-800"><strong>Fase 3:</strong> Desaceleração</div>
+                    <div class="p-2 bg-slate-100 rounded"><strong>Fase 4:</strong> Estabilização (Baixa)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide p-4 md:p-10 min-h-full flex flex-col items-center pb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-brand-dark mb-4 md:mb-6 text-center animate-fade-in mt-10 md:mt-0">Análise de Pirâmides Etárias</h2>
+            
+            <div class="bg-white p-4 md:p-6 rounded-2xl shadow-xl border border-slate-200 w-full max-w-4xl flex-1 flex flex-col md:flex-row gap-6 animate-fade-up">
+                
+                <div class="w-full md:w-2/3 h-[300px] md:h-full relative">
+                    <canvas id="piramideChart"></canvas>
+                </div>
+                
+                <div class="w-full md:w-1/3 flex flex-col justify-center gap-4">
+                    <div class="p-4 rounded-xl bg-slate-50 border-l-4 border-brand-pink shadow-sm">
+                        <h4 class="font-bold text-brand-dark text-sm uppercase">Topo (Idosos)</h4>
+                        <p class="text-xs text-slate-600 mt-1">Topo largo indica elevada <strong>Esperança de Vida</strong> (países desenvolvidos).</p>
+                    </div>
+                    
+                    <div class="p-4 rounded-xl bg-slate-50 border-l-4 border-brand-purple shadow-sm">
+                        <h4 class="font-bold text-brand-dark text-sm uppercase">Corpo (Adultos)</h4>
+                        <p class="text-xs text-slate-600 mt-1">Indica a força de trabalho (PEA). Um corpo largo sugere a existência do <strong>Bónus Demográfico</strong>.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-50 border-l-4 border-blue-400 shadow-sm">
+                        <h4 class="font-bold text-brand-dark text-sm uppercase">Base (Jovens)</h4>
+                        <p class="text-xs text-slate-600 mt-1">Base larga indica elevada <strong>Taxa de Natalidade</strong> e fecundidade (países subdesenvolvidos).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide p-6 md:p-12 min-h-full flex flex-col justify-center bg-brand-light pb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-brand-dark mb-8 md:mb-12 text-center animate-fade-in mt-10 md:mt-0">Estrutura Económica da População</h2>
+            
+            <div class="flex flex-col md:flex-row gap-6 md:gap-12 w-full max-w-5xl mx-auto animate-fade-up">
+                
+                <div class="flex-1 bg-white p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-green-100 rounded-full opacity-50"></div>
+                    <h3 class="text-2xl font-bold text-green-600 mb-2 z-10">PEA</h3>
+                    <p class="text-sm font-bold text-slate-500 mb-6 z-10">População Economicamente Ativa</p>
+                    <ul class="space-y-4 text-slate-700 z-10">
+                        <li class="flex items-start gap-3"><i class="fas fa-briefcase text-green-500 mt-1"></i> <span>Pessoas que estão <strong>empregadas</strong> (formais ou informais).</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-magnifying-glass text-green-500 mt-1"></i> <span>Pessoas que estão <strong>desempregadas</strong> (mas à procura de trabalho).</span></li>
+                    </ul>
+                    <div class="mt-auto pt-6 text-xs text-slate-400 border-t border-slate-100 italic z-10">Sustentam a economia e a segurança social.</div>
+                </div>
+
+                <div class="flex-1 bg-white p-8 rounded-3xl shadow-lg border border-slate-100 flex flex-col relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-red-100 rounded-full opacity-50"></div>
+                    <h3 class="text-2xl font-bold text-red-500 mb-2 z-10">PEI</h3>
+                    <p class="text-sm font-bold text-slate-500 mb-6 z-10">População Economicamente Inativa</p>
+                    <ul class="space-y-4 text-slate-700 z-10">
+                        <li class="flex items-start gap-3"><i class="fas fa-baby text-red-400 mt-1"></i> <span>Crianças e estudantes em dedicação exclusiva.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-person-cane text-red-400 mt-1"></i> <span>Reformados/Aposentados.</span></li>
+                        <li class="flex items-start gap-3"><i class="fas fa-house-user text-red-400 mt-1"></i> <span>Donas(os) de casa.</span></li>
+                    </ul>
+                    <div class="mt-auto pt-6 text-xs text-slate-400 border-t border-slate-100 italic z-10">Considerados demograficamente "dependentes".</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide p-6 md:p-10 min-h-full flex flex-col bg-slate-50 pb-16">
+            <h2 class="text-2xl md:text-4xl font-bold text-brand-dark mb-8 text-center animate-fade-in mt-10 md:mt-0">Dinâmica Migratória (Brasil e Mundo)</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-6xl mx-auto animate-fade-up">
+                
+                <div class="bg-white rounded-xl shadow p-5 border-t-4 border-sky-500 hover:shadow-lg transition-shadow">
+                    <i class="fas fa-train-tram text-3xl text-sky-500 mb-3"></i>
+                    <h3 class="font-bold text-slate-800 mb-2">Pendular</h3>
+                    <p class="text-xs text-slate-600">Movimento de vai-e-vem diário (casa-trabalho) entre municípios da mesma região metropolitana.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow p-5 border-t-4 border-amber-500 hover:shadow-lg transition-shadow">
+                    <i class="fas fa-wheat-awn text-3xl text-amber-500 mb-3"></i>
+                    <h3 class="font-bold text-slate-800 mb-2">Transumância</h3>
+                    <p class="text-xs text-slate-600">Migração sazonal temporária. Ex: Trabalhadores que vão para o corte de cana e depois regressam.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow p-5 border-t-4 border-emerald-600 hover:shadow-lg transition-shadow">
+                    <i class="fas fa-city text-3xl text-emerald-600 mb-3"></i>
+                    <h3 class="font-bold text-slate-800 mb-2">Êxodo Rural</h3>
+                    <p class="text-xs text-slate-600">Saída definitiva do campo para a cidade. Causa da intensa urbanização (e macrocefalia urbana).</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow p-5 border-t-4 border-brand-purple hover:shadow-lg transition-shadow">
+                    <i class="fas fa-brain text-3xl text-brand-purple mb-3"></i>
+                    <h3 class="font-bold text-slate-800 mb-2">Fuga de Cérebros</h3>
+                    <p class="text-xs text-slate-600">Saída de profissionais qualificados e cientistas de países em desenvolvimento para países ricos.</p>
+                </div>
+
+            </div>
+            
+            <div class="mt-8 text-center animate-fade-in delay-200">
+                <span class="inline-block bg-brand-pink text-white px-6 py-3 rounded-full font-bold shadow-md">
+                    Saldo Migratório = Imigrantes (Entradas) - Emigrantes (Saídas)
+                </span>
+            </div>
+        </div>
+
+        <button class="nav-btn nav-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn nav-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+        
+        <div class="progress-bar" id="progressBar" style="width: 10%"></div>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    
+    let chartTrans = null;
+    let chartPira = null;
+
+    // RENDERIZAR GRÁFICO 1: TRANSIÇÃO DEMOGRÁFICA (LINHAS)
+    function renderTrans() {
+        const ctx = document.getElementById('transicaoChart');
+        if (!ctx) return;
+        if (chartTrans) chartTrans.destroy();
+
+        chartTrans = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Fase 1 (Pré-Ind.)', 'Fase 2 (Explosão)', 'Fase 3 (Queda)', 'Fase 4 (Estável)'],
+                datasets: [
+                    {
+                        label: 'Taxa de Natalidade',
+                        data: [40, 40, 20, 10],
+                        borderColor: '#3b82f6', // Azul
+                        backgroundColor: '#3b82f6',
+                        borderWidth: 4,
+                        tension: 0.3,
+                        pointRadius: 6
+                    },
+                    {
+                        label: 'Taxa de Mortalidade',
+                        data: [40, 15, 10, 10],
+                        borderColor: '#ef4444', // Vermelho
+                        backgroundColor: '#ef4444',
+                        borderWidth: 4,
+                        tension: 0.3,
+                        pointRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 2500, easing: 'easeOutQuart' },
+                plugins: {
+                    legend: { position: 'top', labels: { font: { family: 'Montserrat', weight: 'bold' } } }
+                },
+                scales: {
+                    y: { beginAtZero: true, suggestedMax: 50, title: { display: true, text: 'Taxas (‰)' } }
+                }
+            }
+        });
+    }
+
+    // RENDERIZAR GRÁFICO 2: PIRÂMIDE ETÁRIA (BARRAS HORIZONTAIS)
+    function renderPira() {
+        const ctx = document.getElementById('piramideChart');
+        if (!ctx) return;
+        if (chartPira) chartPira.destroy();
+
+        chartPira = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['80+', '70-79', '60-69', '50-59', '40-49', '30-39', '20-29', '10-19', '0-9'],
+                datasets: [
+                    {
+                        label: 'Homens (%)',
+                        data: [-1, -3, -5, -6, -7, -8, -9, -10, -11], // Negativo para ir para a esquerda
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Mulheres (%)',
+                        data: [2, 4, 6, 7, 8, 9, 10, 10, 11], // Positivo para ir para a direita
+                        backgroundColor: '#ff758c',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y', // Faz as barras ficarem horizontais
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 2000 },
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { family: 'Montserrat', weight: 'bold' } } },
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => {
+                                return context.dataset.label + ': ' + Math.abs(context.raw) + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: false,
+                        suggestedMin: -15,
+                        suggestedMax: 15,
+                        ticks: { callback: (value) => Math.abs(value) + '%' } // Esconde o sinal negativo
+                    },
+                    y: { stacked: true }
+                }
+            }
+        });
+    }
+
+    function updateSlide() {
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+                slide.scrollTop = 0; 
+                
+                const animatedEls = slide.querySelectorAll('.animate-fade-up, .animate-fade-in');
+                animatedEls.forEach(el => {
+                    el.style.animation = 'none';
+                    el.offsetHeight; 
+                    el.style.animation = null; 
+                });
+
+                // Dispara os gráficos apenas quando os slides respetivos forem abertos
+                if (index === 3) setTimeout(renderTrans, 300);
+                if (index === 4) setTimeout(renderPira, 300);
+
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        
+        const progress = ((currentSlide + 1) / slides.length) * 100;
+        progressBar.style.width = progress + '%';
+        
+        document.querySelector('.nav-prev').style.opacity = currentSlide === 0 ? '0.3' : '1';
+        document.querySelector('.nav-prev').style.cursor = currentSlide === 0 ? 'default' : 'pointer';
+        
+        document.querySelector('.nav-next').style.opacity = currentSlide === slides.length - 1 ? '0.3' : '1';
+        document.querySelector('.nav-next').style.cursor = currentSlide === slides.length - 1 ? 'default' : 'pointer';
+    }
+
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlide(); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlide(); } }
+
+    // Eventos Teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+        else if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // EVENTOS DE TOUCH (SWIPE)
+    let touchstartX = 0;
+    let touchendX = 0;
+    
+    document.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+
+    document.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, {passive: true});
+
+    function handleSwipe() {
+        if (touchendX < touchstartX - 50) nextSlide();
+        if (touchendX > touchstartX + 50) prevSlide();
+    }
+
+    updateSlide();
+</script>
+</body>
+</html>
