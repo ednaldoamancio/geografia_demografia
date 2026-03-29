@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards de População | Estudos Intensivos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* MANTENDO O SEU ESTILO ORIGINAL DO INDEX */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            padding: 20px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #8e44ad; /* Cor de destaque roxa */
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .header h1 { margin: 0; color: #2c3e50; font-size: 2em; }
+        .header p { font-size: 1.1em; color: #555; margin-top: 5px; font-weight: 500; }
+
+        /* Botão Voltar */
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #8e44ad;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+        .btn-voltar:hover { color: #2c3e50; }
+
+        @media (max-width: 768px) {
+            .btn-voltar { position: static; transform: none; display: inline-block; margin-bottom: 10px; }
+        }
+
+        /* ESTILOS DOS FLASHCARDS */
+        .content-area {
+            width: 90%;
+            max-width: 1000px;
+            margin: 40px 0;
+        }
+
+        .card-container { perspective: 1000px; height: 180px; }
+        .flashcard { 
+            position: relative; width: 100%; height: 100%; 
+            transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; 
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .front, .back { 
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
+            display: flex; align-items: center; justify-content: center; 
+            padding: 1.5rem; text-align: center; border-radius: 12px; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08); 
+        }
+        .front { 
+            background-color: white; 
+            color: #2c3e50;
+            font-weight: bold; 
+            font-size: 1.1em;
+            border-bottom: 4px solid #ff758c;
+        }
+        .back { 
+            background-color: #2c3e50; 
+            color: white;
+            transform: rotateY(180deg); 
+            font-size: 1em; 
+            border-bottom: 4px solid #84fab0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+        <h1>🗂️ Flashcards de População</h1>
+        <p>Clique no cartão para ver a resposta!</p>
+    </header>
+
+    <div class="content-area">
+        <div class="grid md:grid-cols-3 gap-6">
+            
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">População Absoluta vs. Relativa</div>
+                    <div class="back">Absoluta = total de hab. (país populoso).<br>Relativa = hab/km² (país povoado).</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Crescimento Vegetativo</div>
+                    <div class="back">É a diferença entre a Taxa de Natalidade e a Taxa de Mortalidade.</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Crescimento Demográfico</div>
+                    <div class="back">Cresc. Vegetativo + Saldo Migratório (imigrantes menos emigrantes).</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Natalidade vs. Fecundidade</div>
+                    <div class="back">Natalidade: nascimentos por 1000 hab. <br>Fecundidade: média de filhos por mulher.</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Pirâmide Etária: Base e Topo</div>
+                    <div class="back">A Base reflete os nascimentos (jovens). O Topo reflete a expectativa de vida (idosos).</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Bônus (Janela) Demográfico</div>
+                    <div class="back">Fase favorável: há mais adultos (Pop. Econ. Ativa) do que dependentes (crianças/idosos).</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Queda da Natalidade no Brasil</div>
+                    <div class="back">Causada pela urbanização, métodos contraceptivos e inserção da mulher no mercado de trabalho.</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Aumento da Expectativa de Vida</div>
+                    <div class="back">Resultado de avanços na medicina, vacinação, saneamento básico e vida urbana.</div>
+                </div>
+            </div>
+
+            <div class="card-container" onclick="this.querySelector('.flashcard').classList.toggle('flipped')">
+                <div class="flashcard">
+                    <div class="front">Transição Demográfica</div>
+                    <div class="back">Passagem de altas taxas de natalidade/mortalidade para baixas. Gera o envelhecimento populacional.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

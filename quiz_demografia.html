@@ -2,428 +2,452 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quiz ENEM: Demografia e Estudos Populacionais</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Intensivo | Demografia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdf6fb; /* Fundo suave a combinar com o tema */
-            color: #333;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            color: #333;
             min-height: 100vh;
         }
-        .nav-back {
-            align-self: flex-start;
-            margin-bottom: 20px;
-            text-decoration: none;
-            background: #8e44ad; /* Roxo do tema */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .nav-back:hover { background: #732d91; }
-        
-        .container {
-            background-color: #fff;
-            max-width: 800px;
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
             width: 100%;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(142, 68, 173, 0.1);
-            padding: 30px;
-            box-sizing: border-box;
-        }
-        h1 {
+            padding: 20px 20px;
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #8e44ad;
+            position: relative;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 2em; }
+        .header p { font-size: 1.1em; color: #555; margin-top: 5px; font-weight: 500; }
+        
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
             color: #8e44ad;
-            margin-top: 0;
-        }
-        h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #ff758c;
-            padding-bottom: 10px;
-        }
-        .question-box {
-            display: none;
-            margin-bottom: 20px;
-        }
-        .question-box.active { display: block; animation: fadeIn 0.5s; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .options {
-            list-style-type: none;
-            padding: 0;
-        }
-        .options li {
-            background-color: #f8f9fa;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid #e9ecef;
-            font-size: 1.05em;
-        }
-        .options li:hover { background-color: #f1e6f5; border-color: #d2b4de; }
-        .options li.selected {
-            background-color: #8e44ad;
-            color: white;
-            border-color: #732d91;
             font-weight: bold;
-        }
-        
-        .btn {
-            background-color: #ff758c;
-            color: white;
-            border: none;
-            padding: 15px 25px;
             font-size: 1.1em;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            display: block;
-            width: 100%;
-            margin-top: 20px;
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .btn:hover { background-color: #ff5270; transform: translateY(-2px); }
-        .btn:disabled { background-color: #d1d5db; cursor: not-allowed; transform: none; box-shadow: none; }
-        
-        #result-screen, #ranking-screen, #start-screen { display: none; text-align: center; }
-        
-        .score-display {
-            font-size: 3.5em;
-            font-weight: bold;
-            color: #8e44ad;
-            margin: 20px 0;
-        }
-        input[type="text"] {
-            padding: 15px;
-            width: 100%;
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            border: 2px solid #d2b4de;
-            border-radius: 8px;
-            box-sizing: border-box;
-            outline: none;
-        }
-        input[type="text"]:focus { border-color: #8e44ad; }
-        
-        .ranking-list {
-            list-style-type: none;
-            padding: 0;
-            text-align: left;
-        }
-        .ranking-list li {
-            background: #fdf6fb;
-            margin: 8px 0;
-            padding: 15px;
-            border-left: 6px solid #8e44ad;
-            border-radius: 4px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: color 0.3s;
         }
+        .btn-voltar:hover { color: #2c3e50; }
         
-        .progress-bar {
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            overflow: hidden;
+        @media (max-width: 768px) {
+            .btn-voltar { position: static; transform: none; display: inline-block; margin-bottom: 10px; }
         }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ff758c, #8e44ad);
-            width: 0%;
-            transition: width 0.4s ease;
+
+        .content-area {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px 0;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            border-bottom: 4px solid #8e44ad;
+        }
+        .feedback-box {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .medal-icon {
+            font-size: 5rem;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="nav-back">&#8592; Voltar ao Menu</a>
+    <header class="header">
+        <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+        <h1>🎯 Simulado Nível ENEM: Demografia</h1>
+        <p>30 questões divididas em 3 fases épicas. Conquiste o Ouro!</p>
+    </header>
 
-    <div class="container">
-        <h1>📊 Desafio Demografia: Nota 1000!</h1>
+    <div class="content-area">
         
-        <div id="start-screen" style="display: block;">
-            <p style="font-size: 1.1em; color: #555;">Bem-vindo ao simulado do 1º Bimestre. São 20 questões sobre teorias demográficas, indicadores, pirâmides etárias e migrações.</p>
-            <p><strong>Regras:</strong> Cada questão vale 50 pontos. O objetivo da sua equipe é alcançar os 1000 pontos. Pode refazer o teste as vezes que forem necessárias!</p>
-            <button class="btn" onclick="startQuiz()">Iniciar Simulado</button>
-            <button class="btn" style="background-color: #34495e; margin-top: 15px;" onclick="showRankingOnly()">Ver Diário de Notas (Ranking)</button>
+        <div id="login-screen" class="card text-center">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Identifique-se para o Ranking</h2>
+            <input type="text" id="aluno-nome" placeholder="Seu Nome e Sobrenome" class="w-full p-3 mb-3 border rounded text-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <input type="text" id="aluno-serie" placeholder="Sua Série/Turma" class="w-full p-3 mb-6 border rounded text-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+            <button onclick="iniciarQuiz()" class="bg-purple-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-700 transition text-lg w-full">Iniciar Jornada</button>
         </div>
-        
-        <div id="quiz-screen">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress"></div>
+
+        <div id="quiz-screen" class="card hidden">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <span class="font-bold text-gray-600">Fase <span id="fase-atual-txt">1</span> | Questão <span id="q-atual">1</span>/10</span>
+                <span class="font-bold text-red-500">⏱️ <span id="timer">00:00</span></span>
             </div>
-            <h3 id="question-counter" style="color: #8e44ad;">Questão 1 de 20</h3>
             
-            <div id="questions-container"></div>
-            
-            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>Confirmar Resposta</button>
+            <h3 id="pergunta-texto" class="text-xl font-bold text-gray-800 mb-6"></h3>
+            <div id="opcoes-container" class="flex flex-col gap-3"></div>
+
+            <div id="feedback-container" class="mt-6 hidden feedback-box p-4 rounded-lg">
+                <p id="feedback-texto" class="font-medium text-lg"></p>
+                <p id="feedback-explicacao" class="mt-2 text-gray-700 text-sm"></p>
+                <button id="btn-avancar" onclick="proximaQuestao()" class="mt-4 bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 w-full">Avançar →</button>
+            </div>
         </div>
-        
-        <div id="result-screen">
-            <h2>Fim do Simulado!</h2>
-            <p>A sua pontuação final (estilo ENEM) foi:</p>
-            <div class="score-display"><span id="final-score">0</span> / 1000</div>
-            
-            <p>Digite o seu NOME e o nome da sua EQUIPE para registar no diário do professor:</p>
-            <input type="text" id="student-name" placeholder="Ex: João Silva - Equipe Delta">
-            <button class="btn" onclick="saveScore()">Salvar Pontuação</button>
-            <button class="btn" style="background-color: #95a5a6; margin-top: 10px;" onclick="location.reload()">Tentar Novamente</button>
+
+        <div id="intermission-screen" class="card hidden text-center">
+            <h2 id="intermission-title" class="text-3xl font-bold text-gray-800 mb-2">Fase Concluída!</h2>
+            <div id="medal-container" class="medal-icon my-4">🥉</div>
+            <p id="intermission-msg" class="text-lg text-gray-600 mb-4"></p>
+            <p class="text-xl font-bold text-purple-600 mb-6">Acertos nesta fase: <span id="acertos-fase">0</span>/10</p>
+            <button onclick="continuarFase()" class="bg-green-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-600 w-full text-lg">Ir para a Próxima Fase 🚀</button>
         </div>
-        
-        <div id="ranking-screen">
-            <h2>Diário de Notas - Demografia</h2>
-            <p>As notas estão salvas de forma segura neste aparelho.</p>
-            <ul class="ranking-list" id="ranking-list"></ul>
-            <button class="btn" onclick="location.reload()">Voltar ao Início</button>
+
+        <div id="result-screen" class="card hidden">
+            <div class="text-center">
+                <div class="medal-icon my-2">🥇</div>
+                <h2 class="text-3xl font-bold mb-2 text-gray-800">Jornada Concluída!</h2>
+                <p class="text-lg mb-6 text-gray-600">Tempo total: <span id="final-time" class="font-bold text-purple-600"></span></p>
+                
+                <div class="mb-8">
+                    <p class="text-6xl font-black text-yellow-500"><span id="final-score">0</span>%</p>
+                    <p class="text-gray-500 mt-2 font-medium">de aproveitamento total</p>
+                </div>
+            </div>
+
+            <h3 class="text-xl font-bold mb-4 border-b pb-2 text-gray-800">🏆 Ranking Oficial</h3>
+            <div class="bg-gray-50 rounded-lg overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-purple-100 text-purple-800">
+                        <tr>
+                            <th class="p-3">Posição</th>
+                            <th class="p-3">Aluno</th>
+                            <th class="p-3">Turma</th>
+                            <th class="p-3">Score</th>
+                            <th class="p-3">Tempo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-body" class="text-sm"></tbody>
+                </table>
+            </div>
+            <button onclick="location.reload()" class="mt-8 bg-gray-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-700 w-full">Jogar Novamente</button>
         </div>
+
     </div>
 
-<script>
-    const questionsData = [
-        {
-            q: "A diferença conceitual entre um país 'populoso' e um país 'povoado' reside, respetivamente, na análise da:",
-            options: ["Taxa de fecundidade e taxa de mortalidade.", "População absoluta e densidade demográfica (população relativa).", "População urbana e população rural.", "População economicamente ativa e inativa.", "Taxa de imigração e taxa de emigração."],
-            a: 1
-        },
-        {
-            q: "O Crescimento Vegetativo (ou Natural) de uma população é obtido através de qual operação matemática?",
-            options: ["A soma da imigração com a natalidade.", "A divisão da população total pela área do território.", "A diferença entre a taxa de natalidade e a taxa de mortalidade.", "A multiplicação da taxa de fecundidade pela expectativa de vida.", "A diferença entre imigrantes e emigrantes (saldo migratório)."],
-            a: 2
-        },
-        {
-            q: "Em Demografia, a Taxa de Fecundidade é um indicador que representa:",
-            options: ["O número de crianças que morrem antes de completar 1 ano de vida.", "O número médio de filhos que uma mulher teria até o fim de seu período reprodutivo.", "O total de nascimentos registrados em um país durante uma década.", "A quantidade de idosos acima de 65 anos em uma população.", "O tempo médio que um indivíduo nascido naquele ano espera viver."],
-            a: 1
-        },
-        {
-            q: "A Teoria Malthusiana, formulada no século XVIII por Thomas Malthus, causou grande impacto ao afirmar que:",
-            options: ["O uso de métodos contraceptivos resolveria rapidamente a pobreza mundial.", "A população cresceria em progressão geométrica e a produção de alimentos em progressão aritmética, gerando fome.", "A superpopulação era consequência do subdesenvolvimento, e não a causa dele.", "A tecnologia agrícola sempre seria capaz de acompanhar o crescimento populacional.", "A distribuição igualitária de terras seria a solução para a falta de alimentos globais."],
-            a: 1
-        },
-        {
-            q: "Após a Segunda Guerra Mundial, surgiu a Teoria Neomalthusiana. Qual era o seu argumento principal e a solução proposta?",
-            options: ["A população rica consumia demais; a solução seria reduzir o consumo.", "O alto crescimento populacional nos países pobres era a causa da miséria; a solução seria o controle rigoroso da natalidade.", "A miséria gerava muitos filhos; a solução seria investir em educação e saúde pública.", "O problema era a falta de moradia; a solução seria a construção de metrópoles.", "As migrações internacionais causavam pobreza; a solução seria fechar fronteiras."],
-            a: 1
-        },
-        {
-            q: "A Teoria Reformista (ou Marxista) contrapõe-se diretamente à visão Neomalthusiana ao defender que:",
-            options: ["O Estado deve impor limites rígidos de filhos por família.", "A fome é um fenômeno natural e irreversível da biologia humana.", "A superpopulação é a causa principal da destruição ambiental na Europa.", "O rápido crescimento demográfico é consequência da pobreza e da má distribuição de renda, e não a causa.", "Somente a redução drástica da população global garantirá o avanço do capitalismo."],
-            a: 3
-        },
-        {
-            q: "O processo de 'Transição Demográfica' é caracterizado historicamente pela:",
-            options: ["Passagem de uma sociedade rural com altas taxas de natalidade e mortalidade para uma sociedade urbana com baixas taxas de natalidade e mortalidade.", "Migração em massa de populações de países centrais para países periféricos.", "Redução da expectativa de vida associada ao aumento das taxas de fecundidade nas metrópoles.", "Estagnação permanente da população, impedindo o envelhecimento populacional.", "Elevação simultânea e incontrolável das taxas de mortalidade infantil e natalidade."],
-            a: 0
-        },
-        {
-            q: "Na Fase 2 da Transição Demográfica, ocorre um fenômeno conhecido como 'Explosão Demográfica'. Qual fator desencadeia essa explosão?",
-            options: ["O aumento drástico do número de imigrantes europeus.", "A queda vertiginosa da taxa de natalidade, enquanto a mortalidade aumenta.", "A forte queda da taxa de mortalidade (avanços médicos e sanitários), enquanto a natalidade se mantém elevada.", "O declínio da agricultura e o retorno em massa de famílias para o campo.", "A introdução de métodos contraceptivos que aumentam indiretamente a fecundidade."],
-            a: 2
-        },
-        {
-            q: "Ao analisar a Pirâmide Etária de um país subdesenvolvido (fase inicial de transição), espera-se encontrar graficamente:",
-            options: ["Um formato cilíndrico perfeito, sem variação entre idades.", "Uma base muito larga (muitos jovens) e um topo estreito (poucos idosos).", "Uma base estreita e um topo extremamente largo, caracterizando uma população geriátrica.", "Uma ausência total de crianças, representada por uma base inexistente.", "O formato de uma ampulheta ou barril."],
-            a: 1
-        },
-        {
-            q: "O envelhecimento populacional, refletido no alargamento do topo da pirâmide etária de países como o Brasil, traz como principal desafio socioeconômico:",
-            options: ["O fechamento excessivo de escolas de ensino médio devido à falta de professores.", "A necessidade de importar tecnologia agrícola primária.", "O aumento exponencial de doenças contagiosas infantis.", "A grande pressão sobre o sistema de previdência social (aposentadorias) e os serviços de saúde.", "O excedente de mão de obra jovem não qualificada (desemprego estrutural)."],
-            a: 3
-        },
-        {
-            q: "O conceito de 'Bônus Demográfico' (ou Janela Demográfica) refere-se a um momento histórico vantajoso para a economia de um país em que:",
-            options: ["A população de crianças em idade pré-escolar atinge o seu ápice histórico.", "O número de idosos supera pela primeira vez o número de adultos trabalhadores.", "A proporção de pessoas em idade ativa (PEA) é superior à proporção de dependentes (crianças e idosos).", "Ocorre a extinção total da taxa de mortalidade infantil.", "O país recebe um número massivo de refugiados de guerra dispostos a trabalhar."],
-            a: 2
-        },
-        {
-            q: "A População Economicamente Ativa (PEA) é um indicador essencial para medir a força de trabalho. Esse grupo é composto por:",
-            options: ["Exclusivamente pessoas que possuem carteira de trabalho assinada.", "Somente servidores públicos e empresários.", "Crianças, estudantes em dedicação exclusiva e donas de casa.", "Pessoas que estão trabalhando (ocupadas) e as que estão procurando emprego ativamente (desempregadas).", "Apenas a parcela da população rural envolvida na colheita."],
-            a: 3
-        },
-        {
-            q: "No estudo das migrações, a diferença matemática entre a quantidade de pessoas que entram (imigrantes) e as que saem (emigrantes) de um território é chamada de:",
-            options: ["Êxodo populacional.", "Transumância.", "Saldo migratório.", "Crescimento vegetativo.", "Densidade migratória absoluta."],
-            a: 2
-        },
-        {
-            q: "O intenso movimento migratório interno que ocorreu no Brasil a partir da década de 1950, marcado pela transferência massiva de populações do campo para as cidades, é denominado:",
-            options: ["Migração Pendular.", "Êxodo Rural.", "Fuga de Cérebros.", "Transumância.", "Migração de Retorno."],
-            a: 1
-        },
-        {
-            q: "O deslocamento diário (vai-e-vem) de milhares de trabalhadores e estudantes que residem em municípios da região metropolitana e viajam à capital, voltando no fim do dia, é classificado como:",
-            options: ["Êxodo Urbano.", "Migração Sazonal.", "Migração Pendular.", "Diaspora.", "Nomadismo moderno."],
-            a: 2
-        },
-        {
-            q: "No contexto migratório, a 'Fuga de Cérebros' (Brain Drain) causa grande prejuízo a países em desenvolvimento. Esse termo refere-se a:",
-            options: ["Fuga de prisioneiros políticos das fronteiras de um país ditatorial.", "Emigração de trabalhadores rurais em busca de terras férteis em nações vizinhas.", "Retorno em massa de estudantes que fracassaram em intercâmbios internacionais.", "A perda de profissionais altamente qualificados e pesquisadores para países desenvolvidos.", "A saída temporária de operários para a construção civil durante megaeventos esportivos."],
-            a: 3
-        },
-        {
-            q: "Migração temporária, associada aos ciclos da natureza ou atividades econômicas específicas (como o corte de cana-de-açúcar), onde o trabalhador vai, passa uma temporada e retorna à origem. Trata-se da:",
-            options: ["Transumância (ou migração sazonal).", "Macrocefalia urbana.", "Refúgio climático.", "Migração pendular.", "Gentrificação."],
-            a: 0
-        },
-        {
-            q: "O órgão federal brasileiro responsável por planejar e executar, a cada 10 anos, o Censo Demográfico para contabilizar a população e as suas características é o:",
-            options: ["MEC - Ministério da Educação.", "IPEA - Instituto de Pesquisa Econômica Aplicada.", "IBGE - Instituto Brasileiro de Geografia e Estatística.", "INCRA - Instituto Nacional de Colonização e Reforma Agrária.", "FUNAI - Fundação Nacional dos Povos Indígenas."],
-            a: 2
-        },
-        {
-            q: "Historicamente, como se caracteriza a distribuição espacial da população brasileira no território nacional?",
-            options: ["Completamente homogênea, com o mesmo número de pessoas em todos os estados.", "Irregular e concentrada, com grande aglomeração populacional na faixa litorânea e na região Sudeste.", "Concentrada predominantemente no interior da Amazônia devido aos ciclos da borracha.", "Uniforme ao longo das fronteiras internacionais do Norte e Centro-Oeste.", "Decrescente nas áreas litorâneas e crescente apenas no semiárido nordestino."],
-            a: 1
-        },
-        {
-            q: "A queda progressiva da Taxa de Fecundidade no Brasil e no mundo a partir da segunda metade do século XX está intimamente ligada a:",
-            options: ["Aumento da influência das crenças religiosas tradicionais nas decisões familiares.", "Retorno maciço da população feminina para o trabalho exclusivamente doméstico rural.", "Urbanização, inserção da mulher no mercado de trabalho e difusão de métodos contraceptivos.", "Intervenção governamental rigorosa proibindo casamentos precoces.", "Guerra Fria e a limitação global de produção de alimentos infantis."],
-            a: 2
+    <script>
+        // BANCO DE QUESTÕES (30 QUESTÕES DIVIDIDAS EM 3 FASES)
+        const questoes = [
+            // --- FASE 1: Conceitos Básicos e Teorias (0 a 9) ---
+            { q: "Qual a principal diferença entre um país populoso e um país povoado?", options: ["Populoso refere-se à densidade demográfica; Povoado à população absoluta.", "Populoso é a população urbana; Povoado a rural.", "Populoso refere-se à população absoluta; Povoado à população relativa (hab/km²).", "Não há diferença."], ans: 2, exp: "População absoluta = nº total de habitantes (populoso). População relativa = habitantes divididos pela área (povoado)." },
+            { q: "Como se obtém o Crescimento Vegetativo de um país?", options: ["Subtraindo a taxa de mortalidade da taxa de natalidade.", "Somando nascimentos e imigrantes.", "Dividindo a população pela área territorial.", "Multiplicando a taxa de fecundidade pela expectativa de vida."], ans: 0, exp: "Crescimento vegetativo (ou natural) é apenas a dinâmica biológica: quem nasce menos quem morre." },
+            { q: "O Crescimento Demográfico total de um território é calculado por:", options: ["Taxa de Natalidade - Taxa de Mortalidade.", "Crescimento Vegetativo + Saldo Migratório.", "Apenas pelo número de imigrantes.", "Taxa de Fecundidade - Saldo Migratório."], ans: 1, exp: "O crescimento demográfico real junta o crescimento vegetativo com quem entra e sai do país (saldo migratório)." },
+            { q: "A Teoria Malthusiana clássica alertava que:", options: ["A população cresceria em Progressão Aritmética e a comida em Progressão Geométrica.", "A população cresceria em Progressão Geométrica (rápido) e os alimentos em Progressão Aritmética (lento).", "A tecnologia resolveria a falta de alimentos.", "O controle de natalidade deveria ser feito com pílulas anticoncepcionais."], ans: 1, exp: "Malthus temia a fome global, pois acreditava que a população dobrava de tamanho rapidamente (2, 4, 8), enquanto a comida crescia devagar (1, 2, 3)." },
+            { q: "Para os Neomalthusianos (pós-2ª Guerra), qual é a causa da pobreza nos países subdesenvolvidos?", options: ["A má distribuição de renda.", "O excesso de população, que consome os investimentos do Estado.", "A exploração das potências imperialistas.", "A falta de recursos naturais."], ans: 1, exp: "Os neomalthusianos culpam o alto número de nascimentos pela pobreza, defendendo políticas severas de controle de natalidade." },
+            { q: "A Teoria Reformista (ou Marxista) rebate os neomalthusianos afirmando que:", options: ["A pobreza é a verdadeira causa do excesso populacional, e não a consequência.", "O controle de natalidade é a única saída.", "O meio ambiente não suportará tantas pessoas.", "A agricultura familiar não produz comida suficiente."], ans: 0, exp: "Reformistas defendem que se o Estado investir em saúde e educação, acabando com a miséria, as famílias naturalmente terão menos filhos." },
+            { q: "A Teoria Ecomalthusiana alerta para qual problema central?", options: ["O fim da previdência social.", "A pressão ambiental e o esgotamento dos recursos naturais devido à superpopulação.", "A queda da fecundidade europeia.", "O fechamento de fronteiras para refugiados."], ans: 1, exp: "A preocupação ecomalthusiana não é apenas a comida, mas o impacto ecológico (água, florestas, clima) de bilhões de pessoas consumindo." },
+            { q: "O que mede a Taxa de Fecundidade?", options: ["Nascimentos por mil habitantes.", "Mortes de crianças menores de 1 ano.", "Número médio de filhos que uma mulher tem durante sua idade reprodutiva.", "O total de mulheres grávidas num ano."], ans: 2, exp: "É a média de filhos por mulher. A taxa ideal para repor a população e não encolher o país é de 2,1 filhos." },
+            { q: "O que a Taxa de Mortalidade Infantil indica com alta precisão?", options: ["Apenas as mortes por causas genéticas.", "A qualidade do sistema de saúde, saneamento básico e nutrição de um país.", "A longevidade dos idosos.", "O saldo migratório do país."], ans: 1, exp: "Crianças menores de 1 ano são muito sensíveis. Alta mortalidade infantil escancara a falta de esgoto, água tratada e medicina preventiva." },
+            { q: "O que é 'Esperança de Vida ao Nascer'?", options: ["A idade máxima que um ser humano já alcançou.", "O tempo médio, em anos, que um indivíduo de uma população deve viver.", "O período em que a mulher pode engravidar.", "O número de idosos acima de 80 anos."], ans: 1, exp: "É a expectativa média de vida. Ela sobe drasticamente quando um país melhora a medicina e reduz a mortalidade infantil." },
+
+            // --- FASE 2: Transição Demográfica (10 a 19) ---
+            { q: "A Fase 1 (Pré-transição) da Transição Demográfica é marcada por:", options: ["Alta natalidade e alta mortalidade, gerando crescimento populacional quase nulo.", "Queda drástica da mortalidade.", "Baixa natalidade e alta mortalidade.", "Alta natalidade e baixa mortalidade."], ans: 0, exp: "Sociedades rurais primitivas: nasciam muitos filhos (para ajudar na lavoura), mas morriam muitos por falta de saneamento." },
+            { q: "O 'Boom Demográfico' (Explosão Populacional) ocorre em qual fase?", options: ["Fase 1", "Fase 2", "Fase 3", "Fase 4"], ans: 1, exp: "Na Fase 2, a medicina avança e a mortalidade despenca. Como as famílias continuam tendo muitos filhos, a população explode." },
+            { q: "O que marca a entrada de um país na Fase 3 da Transição Demográfica?", options: ["Aumento da mortalidade infantil.", "Aumento exponencial da natalidade urbana.", "A queda acelerada da taxa de natalidade e a estabilização da mortalidade.", "O início da industrialização precoce."], ans: 2, exp: "A Fase 3 é a desaceleração. As pessoas vão para a cidade, usam métodos contraceptivos e a mulher entra no mercado, reduzindo o número de filhos." },
+            { q: "A Fase 4 (Pós-transição), vivida por países europeus hoje, apresenta:", options: ["Baixa natalidade e baixa mortalidade, gerando estagnação ou encolhimento populacional.", "Explosão de nascimentos devido aos auxílios do governo.", "Volta das altas taxas de mortalidade infantil.", "Renovação acelerada da mão de obra."], ans: 0, exp: "Na Fase 4, a população envelhece muito. Nascem tão poucas crianças que, em muitos casos, o crescimento vegetativo fica negativo." },
+            { q: "Em uma pirâmide etária, o que a BASE larga representa?", options: ["Alta expectativa de vida.", "Muitos idosos.", "Alta taxa de natalidade (muitos jovens/crianças).", "Alto desenvolvimento humano."], ans: 2, exp: "A base abriga a população de 0 a 19 anos. Base larga é sinônimo de alta fecundidade/natalidade (comum em países subdesenvolvidos)." },
+            { q: "Quando o TOPO de uma pirâmide etária se alarga, isso indica:", options: ["Aumento da mortalidade adulta.", "Aumento da esperança de vida (mais idosos sobrevivendo).", "Aumento da taxa de natalidade.", "Queda do crescimento demográfico."], ans: 1, exp: "O topo representa os idosos (65+). Topo largo mostra que o país tem boa medicina e qualidade de vida." },
+            { q: "O que é a População Economicamente Ativa (PEA)?", options: ["Apenas os empresários e patrões.", "Pessoas em idade de trabalhar que estão empregadas ou procurando emprego.", "Todas as crianças e idosos do país.", "Apenas os trabalhadores com carteira assinada."], ans: 1, exp: "A PEA forma a força de trabalho do país. Crianças e idosos aposentados formam a População Inativa (dependentes)." },
+            { q: "O 'Bônus Demográfico' ou Janela Demográfica ocorre quando:", options: ["A População Inativa supera a PEA.", "O número de adultos (PEA) é proporcionalmente muito maior que o de dependentes (crianças e idosos).", "O país entra na Fase 4 da transição.", "A taxa de fecundidade atinge 5 filhos por mulher."], ans: 1, exp: "É uma 'janela' de ouro para o país enriquecer, pois há muitos braços para trabalhar e poucos dependentes para o Estado sustentar." },
+            { q: "Qual o principal desafio econômico de um país que atinge a Fase 4 (Envelhecimento Populacional)?", options: ["Falta de escolas maternais.", "Risco de colapso da previdência social e escassez de mão de obra jovem.", "Aumento incontrolável do desemprego jovem.", "Explosão de favelas."], ans: 1, exp: "Muitos aposentados recebendo benefícios e poucos jovens trabalhando para pagar impostos quebram o sistema previdenciário." },
+            { q: "Por que as pirâmides etárias de países do Oriente Médio (como Catar e EAU) costumam ter um 'inchaço' na lateral masculina adulta?", options: ["Pela alta mortalidade feminina na infância.", "Pela imigração em massa de homens adultos para trabalhar na construção civil e exploração de petróleo.", "Por fatores puramente genéticos.", "Devido a guerras recentes."], ans: 1, exp: "Esses países atraem milhões de imigrantes homens de países mais pobres para trabalhar, deformando o lado masculino da pirâmide." },
+
+            // --- FASE 3: Brasil e Dinâmicas Contemporâneas (20 a 29) ---
+            { q: "Historicamente, qual fator foi crucial para a queda da mortalidade no Brasil a partir da década de 1940?", options: ["O fim da escravidão.", "A vacinação em massa, a penicilina e o avanço da saúde pública (Fase 2).", "A criação do SUS nos anos 1990.", "O fechamento das fronteiras para imigrantes."], ans: 1, exp: "O Brasil entrou na Fase 2 no meio do séc. XX com a revolução médico-sanitária, fazendo a população crescer rápido." },
+            { q: "Na década de 1970, o Brasil começou a viver a queda da sua natalidade. Qual foi o motor principal dessa mudança?", options: ["A política estatal de controle rígido de natalidade.", "A intensa urbanização, que elevou o custo de vida e mudou os costumes das famílias.", "Epidemias que afetaram a população rural.", "A proibição de métodos contraceptivos."], ans: 1, exp: "A migração do campo para a cidade fez o filho deixar de ser 'mão de obra agrícola' e passar a ser um 'alto custo urbano'." },
+            { q: "A entrada massiva da mulher no mercado de trabalho alterou a demografia pois:", options: ["Aumentou a mortalidade feminina.", "Fez com que as mulheres adiassem a maternidade e reduzissem o número de filhos, focando na carreira.", "Retornou o país para a Fase 1 da transição.", "Aumentou o crescimento vegetativo."], ans: 1, exp: "A emancipação feminina, os estudos e o mercado de trabalho mudaram o papel da mulher, reduzindo drasticamente a taxa de fecundidade." },
+            { q: "Atualmente, o Brasil encontra-se em qual momento da Transição Demográfica?", options: ["Fase 1", "Fase 2", "Fase 3, caminhando rápido para o envelhecimento da Fase 4", "Já somos Fase 4, com crescimento vegetativo negativo"], ans: 2, exp: "Nossa natalidade já é baixa (Fase 3), mas nossa população ainda cresce um pouco. O envelhecimento é acelerado." },
+            { q: "O Brasil soube aproveitar plenamente o seu Bônus Demográfico?", options: ["Sim, erradicou-se a pobreza e o desemprego.", "Não, pois a falta de qualificação, o desemprego e o trabalho informal impediram o país de enriquecer totalmente nessa janela.", "Sim, tornando o país desenvolvido.", "Não, pois o bônus ainda nem começou."], ans: 1, exp: "Temos muitos adultos, mas a falha na educação e a falta de empregos de qualidade fazem o país desperdiçar essa janela histórica." },
+            { q: "A Política do Filho Único na China foi relaxada recentemente por qual motivo?", options: ["A pressão ambiental acabou.", "A falta de espaço nas cidades foi resolvida.", "O país envelheceu muito rápido e a escassez de jovens passou a ameaçar a economia e a previdência.", "Ocorreu um boom de imigração estrangeira."], ans: 2, exp: "A política freou nascimentos rápido demais. Hoje a China sofre para repor a mão de obra das fábricas." },
+            { q: "Por que a Europa, mesmo enfrentando xenofobia, necessita de imigrantes?", options: ["Para aumentar o número de políticos.", "Porque a população europeia está encolhendo (Fase 4) e precisa de trabalhadores jovens para manter a economia e pagar as aposentadorias.", "Para competir com os EUA na tecnologia.", "Porque a taxa de natalidade europeia está na Fase 2."], ans: 1, exp: "Sem o imigrante adulto trabalhando, a base encolhida das pirâmides europeias não sustenta o topo largo (idosos)." },
+            { q: "Se a Taxa de Fecundidade de um país cai para 1,5, o que acontece a longo prazo?", options: ["O país atinge o Bônus Demográfico eternamente.", "A população começa a encolher, pois está abaixo da taxa de reposição de 2,1.", "A mortalidade zera.", "A base da pirâmide se alarga exponencialmente."], ans: 1, exp: "Taxa abaixo de 2,1 significa que as gerações futuras serão menores que as atuais, gerando declínio populacional absoluto." },
+            { q: "O estreitamento progressivo do corpo (adultos) em direção à base (jovens) de uma pirâmide etária significa que:", options: ["O país recebe muitos imigrantes idosos.", "O país está retrocedendo economicamente.", "A proporção de jovens e crianças está diminuindo severamente em relação aos adultos e idosos.", "A mortalidade infantil subiu."], ans: 2, exp: "Formato de 'urna' ou pirâmide invertida: o país não faz mais filhos suficientes, típico da Europa e do Japão hoje." },
+            { q: "Em relação ao IBGE, a previsão atual para a população do Brasil nas próximas décadas é:", options: ["Crescer infinitamente.", "Crescer lentamente até cerca de 2040, e depois começar a encolher e envelhecer drasticamente.", "Voltar ao ritmo de crescimento dos anos 1960.", "Diminuir a partir do ano que vem."], ans: 1, exp: "Chegaremos a um platô por volta de 2040 (aprox. 220 milhões) e então a curva de crescimento vegetativo ficará negativa." }
+        ];
+
+        let indexAtual = 0;
+        let acertosFase = 0;
+        let acertosTotal = 0;
+        let tempoSegundos = 0;
+        let timerInterval;
+        let nomeAluno = "";
+        let serieAluno = "";
+        let faseAtual = 1;
+
+        // Elementos DOM
+        const loginScreen = document.getElementById('login-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const intermissionScreen = document.getElementById('intermission-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const timerEl = document.getElementById('timer');
+        const feedbackContainer = document.getElementById('feedback-container');
+
+        // ====== SINTETIZADOR DE ÁUDIO NATIVO (Web Audio API) ======
+        // Isso evita precisar de links externos (MP3) que quebram no Vercel
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playAudioPhase() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const playNote = (f, t) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'sine'; osc.frequency.value = f;
+                osc.start(audioCtx.currentTime + t);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + t + 0.4);
+                osc.stop(audioCtx.currentTime + t + 0.4);
+            };
+            playNote(523.25, 0);   // C5
+            playNote(659.25, 0.1); // E5
+            playNote(783.99, 0.2); // G5
+            playNote(1046.50, 0.3); // C6
         }
-    ];
 
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let selectedOption = null;
+        function playAudioFinal() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const playNote = (f, t, dur) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'triangle'; osc.frequency.value = f;
+                osc.start(audioCtx.currentTime + t);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + t + dur);
+                osc.stop(audioCtx.currentTime + t + dur);
+            };
+            playNote(523.25, 0, 0.2);
+            playNote(659.25, 0.2, 0.2);
+            playNote(783.99, 0.4, 0.2);
+            playNote(1046.50, 0.6, 0.8);
+        }
+        // ==========================================================
 
-    const quizContainer = document.getElementById('questions-container');
-    const nextBtn = document.getElementById('next-btn');
+        function dispararConfetes(intensidade) {
+            if (intensidade === 'leve') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } else {
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            }
+        }
 
-    function buildQuiz() {
-        questionsData.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = `question-box ${index === 0 ? 'active' : ''}`;
-            div.id = `q-${index}`;
+        function formatTime(s) {
+            const min = Math.floor(s / 60).toString().padStart(2, '0');
+            const sec = (s % 60).toString().padStart(2, '0');
+            return `${min}:${sec}`;
+        }
+
+        function iniciarQuiz() {
+            nomeAluno = document.getElementById('aluno-nome').value.trim();
+            serieAluno = document.getElementById('aluno-serie').value.trim();
+
+            if(!nomeAluno || !serieAluno) {
+                alert("Por favor, preencha seu nome e turma para entrar no ranking.");
+                return;
+            }
+
+            // Inicia Áudio Context por interação do usuário
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+
+            loginScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
             
-            let optionsHtml = '';
-            item.options.forEach((opt, optIndex) => {
-                optionsHtml += `<li onclick="selectOption(${index}, ${optIndex}, this)">${opt}</li>`;
+            timerInterval = setInterval(() => {
+                tempoSegundos++;
+                timerEl.innerText = formatTime(tempoSegundos);
+            }, 1000);
+
+            carregarQuestao();
+        }
+
+        function carregarQuestao() {
+            feedbackContainer.classList.add('hidden');
+            document.getElementById('fase-atual-txt').innerText = faseAtual;
+            
+            // Lógica de numeração: mostra de 1 a 10 em cada fase
+            let numQuestaoFase = (indexAtual % 10) + 1;
+            document.getElementById('q-atual').innerText = numQuestaoFase;
+            
+            const q = questoes[indexAtual];
+            document.getElementById('pergunta-texto').innerText = `${indexAtual + 1}. ${q.q}`;
+
+            const opcoesContainer = document.getElementById('opcoes-container');
+            opcoesContainer.innerHTML = "";
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "text-left bg-gray-50 hover:bg-gray-200 px-4 py-3 rounded-lg border border-gray-300 transition font-medium text-gray-700 shadow-sm w-full";
+                btn.innerText = opt;
+                btn.onclick = () => checarResposta(idx, btn);
+                opcoesContainer.appendChild(btn);
+            });
+        }
+
+        function checarResposta(selecionadaIdx, btnClicado) {
+            const q = questoes[indexAtual];
+            const botoes = document.getElementById('opcoes-container').querySelectorAll('button');
+            
+            botoes.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:bg-gray-200');
+                b.classList.add('opacity-70');
             });
 
-            div.innerHTML = `
-                <h3 style="margin-bottom: 15px; line-height: 1.4;">${index + 1}. ${item.q}</h3>
-                <ul class="options">
-                    ${optionsHtml}
-                </ul>
-            `;
-            quizContainer.appendChild(div);
-        });
-    }
+            if (selecionadaIdx === q.ans) {
+                acertosFase++;
+                acertosTotal++;
+                btnClicado.classList.replace('bg-gray-50', 'bg-green-500');
+                btnClicado.classList.replace('text-gray-700', 'text-white');
+                document.getElementById('feedback-texto').innerHTML = "✅ Excelente! Acerto registrado.";
+                document.getElementById('feedback-texto').className = "font-bold text-lg text-green-700";
+            } else {
+                btnClicado.classList.replace('bg-gray-50', 'bg-red-500');
+                btnClicado.classList.replace('text-gray-700', 'text-white');
+                botoes[q.ans].classList.replace('bg-gray-50', 'bg-green-500');
+                botoes[q.ans].classList.replace('text-gray-700', 'text-white');
+                document.getElementById('feedback-texto').innerHTML = "❌ Atenção ao conceito.";
+                document.getElementById('feedback-texto').className = "font-bold text-lg text-red-700";
+            }
 
-    function startQuiz() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('quiz-screen').style.display = 'block';
-        buildQuiz();
-        updateProgress();
-    }
+            document.getElementById('feedback-explicacao').innerText = q.exp;
+            feedbackContainer.classList.remove('hidden');
 
-    function selectOption(qIndex, optIndex, element) {
-        const optionsList = element.parentElement.children;
-        for(let i=0; i<optionsList.length; i++) {
-            optionsList[i].classList.remove('selected');
+            // Muda o texto do botão se for a última da fase
+            const btnAvancar = document.getElementById('btn-avancar');
+            if (indexAtual === 9 || indexAtual === 19 || indexAtual === 29) {
+                btnAvancar.innerText = "Ver Resultado da Fase 🌟";
+                btnAvancar.classList.replace('bg-blue-600', 'bg-purple-600');
+                btnAvancar.classList.replace('hover:bg-blue-700', 'hover:bg-purple-700');
+            } else {
+                btnAvancar.innerText = "Próxima Questão →";
+                btnAvancar.classList.replace('bg-purple-600', 'bg-blue-600');
+                btnAvancar.classList.replace('hover:bg-purple-700', 'hover:bg-blue-700');
+            }
         }
-        element.classList.add('selected');
-        selectedOption = optIndex;
-        nextBtn.disabled = false;
-    }
 
-    function nextQuestion() {
-        if(selectedOption === questionsData[currentQuestionIndex].a) {
-            score += 50; 
+        function proximaQuestao() {
+            if (indexAtual === 9) {
+                mostrarIntermissao("Fase 1 (Bronze)", "🥉", "Parabéns! Você dominou os Conceitos e Teorias Básicas.");
+            } else if (indexAtual === 19) {
+                mostrarIntermissao("Fase 2 (Prata)", "🥈", "Incrível! As dinâmicas da Transição Demográfica já são suas.");
+            } else if (indexAtual === 29) {
+                finalizarQuiz();
+            } else {
+                indexAtual++;
+                carregarQuestao();
+            }
         }
 
-        document.getElementById(`q-${currentQuestionIndex}`).classList.remove('active');
-        
-        currentQuestionIndex++;
-        selectedOption = null;
-        nextBtn.disabled = true;
-
-        if (currentQuestionIndex < questionsData.length) {
-            document.getElementById(`q-${currentQuestionIndex}`).classList.add('active');
-            document.getElementById('question-counter').innerText = `Questão ${currentQuestionIndex + 1} de 20`;
-            updateProgress();
+        function mostrarIntermissao(titulo, medalha, msg) {
+            quizScreen.classList.add('hidden');
+            intermissionScreen.classList.remove('hidden');
             
-            // Rola suavemente para o topo da pergunta
-            window.scrollTo({ top: document.querySelector('.container').offsetTop - 20, behavior: 'smooth' });
-        } else {
-            showResult();
-        }
-    }
+            document.getElementById('intermission-title').innerText = titulo;
+            document.getElementById('medal-container').innerText = medalha;
+            document.getElementById('intermission-msg').innerText = msg;
+            document.getElementById('acertos-fase').innerText = acertosFase;
 
-    function updateProgress() {
-        const percent = ((currentQuestionIndex) / questionsData.length) * 100;
-        document.getElementById('progress').style.width = percent + '%';
-    }
-
-    function showResult() {
-        document.getElementById('quiz-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'block';
-        document.getElementById('final-score').innerText = score;
-    }
-
-    function saveScore() {
-        const studentName = document.getElementById('student-name').value.trim();
-        if(!studentName) {
-            alert("Por favor, digite o seu nome e equipa para registar a nota!");
-            return;
+            playAudioPhase();
+            dispararConfetes('leve');
         }
 
-        const data = {
-            nome: studentName,
-            nota: score,
-            data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})
-        };
+        function continuarFase() {
+            faseAtual++;
+            indexAtual++;
+            acertosFase = 0; // Zera os acertos para a nova fase
+            intermissionScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            carregarQuestao();
+        }
 
-        // Usa a chave ESPECÍFICA de demografia para não apagar o histórico de climatologia
-        let ranking = JSON.parse(localStorage.getItem('demografia_ranking')) || [];
-        ranking.push(data);
-        ranking.sort((a, b) => b.nota - a.nota);
-        localStorage.setItem('demografia_ranking', JSON.stringify(ranking));
-        
-        alert("Nota gravada com sucesso no Diário do Professor!");
-        showRankingOnly();
-    }
+        function finalizarQuiz() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
 
-    function showRankingOnly() {
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('result-screen').style.display = 'none';
-        document.getElementById('ranking-screen').style.display = 'block';
+            playAudioFinal();
+            dispararConfetes('forte');
 
-        const rankingList = document.getElementById('ranking-list');
-        rankingList.innerHTML = '';
-        
-        let ranking = JSON.parse(localStorage.getItem('demografia_ranking')) || [];
-        
-        if(ranking.length === 0) {
-            rankingList.innerHTML = '<li>Nenhuma nota registada neste aparelho ainda.</li>';
-        } else {
-            ranking.forEach((aluno, i) => {
-                let positionColor = i === 0 ? 'color: #f1c40f;' : (i === 1 ? 'color: #95a5a6;' : (i === 2 ? 'color: #d35400;' : 'color: #8e44ad;'));
-                let medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : `${i+1}º`));
+            const porcentagem = Math.round((acertosTotal / questoes.length) * 100);
+            document.getElementById('final-score').innerText = porcentagem;
+            document.getElementById('final-time').innerText = formatTime(tempoSegundos);
+
+            salvarRanking(porcentagem, tempoSegundos);
+        }
+
+        function salvarRanking(porc, tempoSec) {
+            let ranking = JSON.parse(localStorage.getItem('demografiaRanking')) || [];
+            ranking = ranking.filter(r => r.nome.toLowerCase() !== nomeAluno.toLowerCase());
+
+            ranking.push({ nome: nomeAluno, serie: serieAluno, score: porc, tempo: tempoSec });
+
+            ranking.sort((a, b) => {
+                if (b.score === a.score) return a.tempo - b.tempo;
+                return b.score - a.score;
+            });
+
+            localStorage.setItem('demografiaRanking', JSON.stringify(ranking));
+            exibirRanking(ranking);
+        }
+
+        function exibirRanking(ranking) {
+            const tbody = document.getElementById('ranking-body');
+            tbody.innerHTML = "";
+
+            ranking.forEach((r, idx) => {
+                const isCurrent = r.nome.toLowerCase() === nomeAluno.toLowerCase() ? "bg-purple-100 font-bold" : "border-b border-gray-100";
                 
-                rankingList.innerHTML += `
-                    <li>
-                        <strong style="font-size: 1.1em; ${positionColor}">${medal} - ${aluno.nome}</strong> 
-                        <span style="text-align: right;">Nota: <strong style="font-size: 1.2em; color: #ff758c;">${aluno.nota}</strong><br><small style="color: #95a5a6;">${aluno.data}</small></span>
-                    </li>
+                let medalha = `${idx + 1}º`;
+                if(idx === 0) medalha = "🥇 1º";
+                if(idx === 1) medalha = "🥈 2º";
+                if(idx === 2) medalha = "🥉 3º";
+
+                const tr = document.createElement('tr');
+                tr.className = isCurrent;
+                tr.innerHTML = `
+                    <td class="p-3 text-lg">${medalha}</td>
+                    <td class="p-3">${r.nome}</td>
+                    <td class="p-3">${r.serie}</td>
+                    <td class="p-3 text-green-600 font-bold text-lg">${r.score}%</td>
+                    <td class="p-3">${formatTime(r.tempo)}</td>
                 `;
+                tbody.appendChild(tr);
             });
         }
-    }
-</script>
+    </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,35 +8,68 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #fdf6fb 0%, #e8daef 100%);
+            /* Fundo padronizado com o Index.html do projeto */
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
             margin: 0;
             padding: 20px;
             color: #333;
             min-height: 100vh;
         }
 
-        /* Botão de Voltar */
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 30px;
-            text-decoration: none;
-            background: #8e44ad;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
-            transition: all 0.3s ease;
+        /* Cabeçalho no estilo do Index */
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            padding: 20px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #8e44ad;
+            box-sizing: border-box;
+            position: relative;
+            margin-bottom: 40px;
+            border-radius: 12px;
         }
-        .nav-back:hover { background: #732d91; transform: translateY(-2px); }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 2em; }
+        .header p { font-size: 1.1em; color: #555; margin-top: 5px; font-weight: 500; }
+        
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #8e44ad;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+        .btn-voltar:hover { color: #2c3e50; }
+        
+        @media (max-width: 768px) {
+            .btn-voltar { position: static; transform: none; display: inline-block; margin-bottom: 10px; }
+            .header { border-radius: 0; margin-left: -20px; margin-right: -20px; width: calc(100% + 40px); }
+        }
 
-        .title-container { text-align: center; margin-bottom: 40px; }
-        h1 { color: #4a0e4e; margin: 0; font-size: 2em; text-shadow: 1px 1px 2px rgba(0,0,0,0.05); }
-        p.subtitle { color: #8e44ad; font-weight: 500; margin-top: 5px; }
+        /* Imagem do Infográfico Central */
+        .infographic-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            border: 4px solid white;
+        }
+        .infographic-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
 
-        /* Estrutura Central do Mapa */
+        /* Estrutura Central do Mapa (Acordeão) */
         .mindmap-wrapper {
             max-width: 900px;
             margin: 0 auto;
@@ -70,12 +103,15 @@
             position: relative;
         }
 
-        /* Linha vertical conectora escondida no mobile, visível no tablet/pc se usarmos grid */
         @media (min-width: 768px) {
             .branches-container {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 25px;
+            }
+            /* Faz com que a ramificação da Pirâmide ocupe as duas colunas para ter mais espaço */
+            .branch-4 {
+                grid-column: 1 / -1;
             }
         }
 
@@ -129,7 +165,7 @@
         }
         
         .branch.active .branch-content {
-            max-height: 1000px; /* Valor alto para permitir a expansão */
+            max-height: 2000px; /* Aumentado para suportar o texto das pirâmides */
             transition: max-height 0.7s ease-in-out;
         }
 
@@ -152,7 +188,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         
-        .sub-node strong { color: #8e44ad; }
+        .sub-node strong { color: #8e44ad; display: block; margin-bottom: 5px; font-size: 1.05em; }
         
         /* Ajuste do ícone no título */
         .icon-title { width: 30px; text-align: center; margin-right: 10px; color: inherit; }
@@ -166,17 +202,20 @@
 </head>
 <body>
 
-    <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
-    
-    <div class="title-container">
-        <h1>Mapa Mental Interativo</h1>
-        <p class="subtitle">Toque nos cartões para expandir os conceitos</p>
+    <header class="header">
+        <a href="index.html" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+        <h1>👥 Mapa Mental de Demografia</h1>
+        <p>Explore o infográfico e expanda os conceitos abaixo</p>
+    </header>
+
+    <div class="infographic-container">
+        <img src="mapa_mental_demografia.png">
     </div>
 
     <div class="mindmap-wrapper">
         
         <div class="core-node">
-            <i class="fas fa-globe-americas"></i> Demografia e População
+            <i class="fas fa-sitemap"></i> Detalhamento dos Conceitos
         </div>
 
         <div class="branches-container">
@@ -188,9 +227,9 @@
                 </div>
                 <div class="branch-content">
                     <div class="sub-nodes">
-                        <div class="sub-node"><strong>Populoso vs Povoado:</strong> Populoso = População Absoluta alta (muita gente). Povoado = Densidade Demográfica alta (muita gente por km²).</div>
-                        <div class="sub-node"><strong>Crescimento Vegetativo:</strong> Diferença matemática entre a Taxa de Natalidade e a Taxa de Mortalidade.</div>
-                        <div class="sub-node"><strong>Taxa de Fecundidade:</strong> Estimativa do número médio de filhos que uma mulher terá na sua vida reprodutiva.</div>
+                        <div class="sub-node"><strong>Populoso vs Povoado:</strong> Populoso = População Absoluta alta (muita gente no total). Povoado = Densidade Demográfica alta (muita gente aglomerada por km²).</div>
+                        <div class="sub-node"><strong>Crescimento Vegetativo:</strong> Diferença matemática entre a Taxa de Natalidade (nascimentos) e a Taxa de Mortalidade (óbitos).</div>
+                        <div class="sub-node"><strong>Taxa de Fecundidade:</strong> Estimativa do número médio de filhos que uma mulher terá na sua vida reprodutiva. A taxa ideal de reposição é 2,1.</div>
                     </div>
                 </div>
             </div>
@@ -202,9 +241,10 @@
                 </div>
                 <div class="branch-content">
                     <div class="sub-nodes">
-                        <div class="sub-node"><strong>Malthusiana (Séc. 18):</strong> A população cresce em progressão geométrica e os alimentos em progressão aritmética. O mundo passaria fome.</div>
-                        <div class="sub-node"><strong>Neomalthusiana (Pós-Guerra):</strong> A alta natalidade é a causa da pobreza. Solução: Controlo rígido de natalidade e anticoncecionais.</div>
-                        <div class="sub-node"><strong>Reformista / Marxista:</strong> A pobreza é a causa da alta natalidade (e não o inverso). Solução: Distribuição de riqueza, educação e reformas sociais.</div>
+                        <div class="sub-node"><strong>Malthusiana (Séc. 18):</strong> A população cresce em progressão geométrica (rápido) e os alimentos em progressão aritmética (lento). O mundo passaria fome.</div>
+                        <div class="sub-node"><strong>Neomalthusiana (Pós-2ª Guerra):</strong> A alta natalidade é a causa da pobreza. Defendem o controle rígido de natalidade pelo Estado e uso de anticoncepcionais.</div>
+                        <div class="sub-node"><strong>Reformista / Marxista:</strong> A pobreza é a causa da alta natalidade (e não o inverso). A solução é distribuir riqueza, melhorar a educação e saúde pública.</div>
+                        <div class="sub-node"><strong>Ecomalthusiana:</strong> Foco no Meio Ambiente. O excesso de pessoas e o consumo desenfreado esgotarão os recursos naturais do planeta.</div>
                     </div>
                 </div>
             </div>
@@ -216,39 +256,52 @@
                 </div>
                 <div class="branch-content">
                     <div class="sub-nodes">
-                        <div class="sub-node"><strong>Fase 1 (Pré-Industrial):</strong> Altíssima natalidade e altíssima mortalidade. Baixo crescimento.</div>
-                        <div class="sub-node"><strong>Fase 2 (Explosão Demográfica):</strong> Mortalidade despenca (vacinas, saneamento), mas natalidade continua alta. População explode.</div>
-                        <div class="sub-node"><strong>Fase 3 (Desaceleração):</strong> A natalidade começa a cair (urbanização, mulher no mercado de trabalho). O crescimento abranda.</div>
-                        <div class="sub-node"><strong>Fase 4 (Estabilização):</strong> Baixa natalidade e baixa mortalidade. A população envelhece.</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="branch branch-4">
-                <div class="branch-header" onclick="toggleBranch(this)">
-                    <div><i class="fas fa-layer-group icon-title"></i> 4. Estrutura Etária</div>
-                    <i class="fas fa-chevron-down chevron"></i>
-                </div>
-                <div class="branch-content">
-                    <div class="sub-nodes">
-                        <div class="sub-node"><strong>Pirâmide: Base:</strong> Representa os jovens (alta natalidade). <strong>Topo:</strong> Representa os idosos (esperança de vida).</div>
-                        <div class="sub-node"><strong>PEA e PEI:</strong> PEA = População Economicamente Ativa (trabalhadores). PEI = Inativos (crianças, idosos).</div>
-                        <div class="sub-node"><strong>Bónus Demográfico:</strong> Momento económico favorável em que há mais pessoas na PEA (a trabalhar) do que pessoas dependentes.</div>
+                        <div class="sub-node"><strong>Fase 1 (Pré-transição):</strong> Altíssima natalidade e altíssima mortalidade. Crescimento vegetativo quase nulo. Típico de sociedades rurais antigas.</div>
+                        <div class="sub-node"><strong>Fase 2 (Explosão Demográfica):</strong> A mortalidade despenca devido a vacinas e saneamento, mas a natalidade continua alta. A população explode (Boom).</div>
+                        <div class="sub-node"><strong>Fase 3 (Desaceleração):</strong> A natalidade começa a cair devido à urbanização, custo de vida e mulher no mercado de trabalho. O crescimento abranda. (Brasil atual).</div>
+                        <div class="sub-node"><strong>Fase 4 (Pós-transição):</strong> Baixa natalidade e baixa mortalidade. Crescimento nulo ou negativo. A população envelhece muito. (Europa atual).</div>
                     </div>
                 </div>
             </div>
 
             <div class="branch branch-5">
                 <div class="branch-header" onclick="toggleBranch(this)">
-                    <div><i class="fas fa-plane-departure icon-title"></i> 5. Migrações e Dinâmicas</div>
+                    <div><i class="fas fa-plane-departure icon-title"></i> 4. Migrações e Dinâmicas</div>
                     <i class="fas fa-chevron-down chevron"></i>
                 </div>
                 <div class="branch-content">
                     <div class="sub-nodes">
                         <div class="sub-node"><strong>Saldo Migratório:</strong> Número de Imigrantes (quem entra) menos o número de Emigrantes (quem sai).</div>
-                        <div class="sub-node"><strong>Pendular:</strong> Movimento diário de vai-e-vem (casa-trabalho) entre cidades vizinhas.</div>
-                        <div class="sub-node"><strong>Transumância:</strong> Migração sazonal (ligada às estações ou colheitas).</div>
-                        <div class="sub-node"><strong>Fuga de Cérebros:</strong> Saída de cientistas e mão de obra muito qualificada de países pobres para países ricos.</div>
+                        <div class="sub-node"><strong>Pendular:</strong> Movimento diário de vai-e-vem (casa-trabalho/estudo) entre cidades vizinhas ou regiões metropolitanas.</div>
+                        <div class="sub-node"><strong>Transumância:</strong> Migração sazonal temporária (ligada às estações do ano ou épocas de colheita agrícola).</div>
+                        <div class="sub-node"><strong>Fuga de Cérebros:</strong> Saída de cientistas e mão de obra muito qualificada de países subdesenvolvidos em direção a países ricos.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="branch branch-4">
+                <div class="branch-header" onclick="toggleBranch(this)">
+                    <div><i class="fas fa-layer-group icon-title"></i> 5. Fases da Pirâmide Etária</div>
+                    <i class="fas fa-chevron-down chevron"></i>
+                </div>
+                <div class="branch-content">
+                    <div class="sub-nodes">
+                        <div class="sub-node">
+                            <strong>Fase 1: Pirâmide Jovem (Países Subdesenvolvidos)</strong>
+                            <p>Possui a <b>Base muito Larga</b> (alta natalidade e muitos jovens) e o <b>Topo muito Estreito</b> (baixa expectativa de vida e alta mortalidade adulta). É o retrato de países rurais, com pouca infraestrutura médica (Ex: Níger, Somália).</p>
+                        </div>
+                        <div class="sub-node">
+                            <strong>Fase 2: Pirâmide em Transição (Países Emergentes Iniciais)</strong>
+                            <p>A base continua larga, mas o <b>Corpo (adultos) começa a inchar</b> e as laterais ficam menos "cavadas". Isso ocorre porque a mortalidade infantil cai e as pessoas começam a sobreviver até a fase adulta. É o momento do Boom Demográfico (Ex: Brasil nas décadas de 70 a 90).</p>
+                        </div>
+                        <div class="sub-node">
+                            <strong>Fase 3: Pirâmide Adulta / Bônus Demográfico (Brasil Hoje)</strong>
+                            <p>A <b>Base começa a estreitar</b> (queda acentuada da fecundidade) e o <b>Corpo fica mais largo que a base</b>. Ocorre a Janela de Oportunidade ou <i>Bônus Demográfico</i>: há muito mais adultos em idade de trabalhar (PEA) do que jovens e idosos dependentes. Se houver emprego e educação, o país enriquece.</p>
+                        </div>
+                        <div class="sub-node">
+                            <strong>Fase 4: Pirâmide Envelhecida (Países Desenvolvidos)</strong>
+                            <p>A <b>Base fica extremamente estreita</b> (nascem poucas crianças) e o <b>Topo fica muito largo</b> (alta longevidade). O formato lembra uma "Urna" ou "Coxinha". O país enfrenta desafios econômicos graves: falta mão de obra jovem e sobram idosos dependendo da previdência e saúde pública (Ex: Japão, Alemanha, Itália).</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -264,7 +317,7 @@
             // Verifica se este ramo já está ativo
             const isActive = parentBranch.classList.contains('active');
             
-            // Se quisermos que apenas 1 abra de cada vez, fechamos todos primeiro:
+            // Fecha todos os outros ramos para manter a tela limpa
             const allBranches = document.querySelectorAll('.branch');
             allBranches.forEach(branch => {
                 branch.classList.remove('active');
@@ -274,7 +327,7 @@
             if (!isActive) {
                 parentBranch.classList.add('active');
                 
-                // Rolar suavemente para focar no conteúdo aberto (útil para telemóveis pequenos)
+                // Rolar suavemente para focar no conteúdo aberto (útil para celulares)
                 setTimeout(() => {
                     element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 300);
