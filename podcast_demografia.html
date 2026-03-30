@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podcast O Debate | Demografia</title>
+    <title>Podcast Periferia no Centro | Demografia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Mantendo a Identidade Visual do Portal */
@@ -66,19 +66,23 @@
             border-top: 6px solid #8e44ad;
         }
 
-        /* Capa do Podcast */
+        /* Capa do Podcast (CORRIGIDA) */
         .cover-image {
             width: 100%;
-            height: 350px;
-            object-fit: cover;
+            height: auto; /* Deixa a altura se ajustar naturalmente */
+            max-height: 400px; /* Limita para não ficar gigante em telas grandes */
+            object-fit: contain; /* Garante que a imagem não seja cortada */
+            background-color: #f8f9fa; /* Fundo neutro caso a imagem não preencha tudo */
             border-bottom: 4px solid #fbc2eb;
+            display: block;
+            margin: 0 auto; /* Centraliza a imagem no eixo horizontal */
         }
 
         /* Truque para transformar o YouTube em um Player de Áudio */
         .yt-audio-container {
             position: relative;
             width: 100%;
-            height: 90px; /* Altura exata para focar apenas nos controles de áudio */
+            height: 90px;
             overflow: hidden;
             border-radius: 12px;
             background: #000;
@@ -88,10 +92,10 @@
         
         .yt-audio-container iframe {
             position: absolute;
-            top: -20px; /* Empurra a parte do vídeo para cima, escondendo-a */
+            top: -20px;
             left: 0;
             width: 100%;
-            height: 130px; /* Altura suficiente para carregar os controles */
+            height: 130px;
             border: none;
         }
     </style>
@@ -106,10 +110,11 @@
 
     <div class="content-area">
         <div class="podcast-card">
-            <img src="podcast_som.png" alt="Capa: Podcast O Debate" class="cover-image">
+            
+            <img src="podcast_som.png" alt="Capa: Podcast Periferia no Centro" class="cover-image">
             
             <div class="p-8 text-center">
-                <h2 class="text-3xl font-bold text-purple-800 mb-3">O Debate</h2>
+                <h2 class="text-3xl font-bold text-purple-800 mb-3">Periferia no Centro</h2>
                 <p class="text-gray-600 text-lg mb-4">
                     Ouça este episódio especial perfeito para revisar as dinâmicas sociais e a transição demográfica a caminho da escola ou no intervalo. Dê o play e fortaleça seus estudos!
                 </p>
