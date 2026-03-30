@@ -3,76 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podcast: Demografia</title>
+    <title>Podcast Periferia no Centro | Demografia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #fdf6fb; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            color: #333; 
-        }
-        .nav-back { 
-            align-self: flex-start; 
-            margin-bottom: 20px; 
-            text-decoration: none; 
-            background: #8e44ad; 
-            color: white; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
-        }
-        .nav-back:hover { 
-            background: #732d91; 
-            transform: translateY(-2px);
-        }
-        .container { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(142, 68, 173, 0.1); 
-            text-align: center; 
-            max-width: 600px; 
-            width: 100%; 
-            box-sizing: border-box; 
-            border-top: 6px solid #ff758c;
-        }
-        h1 { color: #8e44ad; margin-top: 0; font-size: 2em; }
-        p { color: #7f8c8d; line-height: 1.6; font-size: 1.1em; }
-        
-        /* Estilização do Player de Áudio */
-        audio { 
-            width: 100%; 
-            margin-top: 25px; 
-            outline: none; 
-            border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        /* Ajuste de cores para navegadores Webkit (Chrome/Safari/Edge) */
-        audio::-webkit-media-controls-panel {
-            background-color: #f1e6f5;
+        /* Mantendo a Identidade Visual do Portal */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            min-height: 100vh;
         }
         
-        .icon { font-size: 4.5em; margin-bottom: 15px; display: block; color: #ff758c; text-shadow: 2px 2px 4px rgba(0,0,0,0.05); }
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            padding: 20px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #8e44ad;
+            position: relative;
+        }
+        
+        .header h1 { margin: 0; color: #2c3e50; font-size: 2em; }
+        .header p { font-size: 1.1em; color: #555; margin-top: 5px; font-weight: 500; }
+
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #8e44ad;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+        .btn-voltar:hover { color: #2c3e50; }
+
+        @media (max-width: 768px) {
+            .btn-voltar { position: static; transform: none; display: inline-block; margin-bottom: 10px; }
+        }
+
+        .content-area {
+            width: 90%;
+            max-width: 700px;
+            margin: 40px 0;
+        }
+
+        /* Estilização do Cartão do Podcast */
+        .podcast-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-top: 6px solid #8e44ad;
+        }
+
+        /* Capa do Podcast */
+        .cover-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-bottom: 4px solid #fbc2eb;
+        }
+
+        /* Truque para transformar o YouTube em um Player de Áudio */
+        .yt-audio-container {
+            position: relative;
+            width: 100%;
+            height: 90px; /* Altura exata para focar apenas nos controles de áudio */
+            overflow: hidden;
+            border-radius: 12px;
+            background: #000;
+            margin-top: 25px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        
+        .yt-audio-container iframe {
+            position: absolute;
+            top: -20px; /* Empurra a parte do vídeo para cima, escondendo-a */
+            left: 0;
+            width: 100%;
+            height: 130px; /* Altura suficiente para carregar os controles */
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="nav-back">&#8592; Voltar ao Menu</a>
-    
-    <div class="container">
-        <span class="icon">🎧</span>
-        <h1>Podcast Demográfico</h1>
-        <p>Ouça este resumo especial gerado com Inteligência Artificial. Perfeito para revisar as Teorias Populacionais e a Transição Demográfica enquanto você está no ônibus ou no intervalo do trabalho!</p>
-        
-        <audio controls controlsList="nodownload">
-            <source src="podcast_demografia.mp3" type="audio/mpeg">
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
+
+    <header class="header">
+        <a href="index.html" class="btn-voltar">← Voltar ao Menu</a>
+        <h1>🎧 Podcast Demografia</h1>
+        <p>A geografia pensada e debatida a partir da nossa realidade.</p>
+    </header>
+
+    <div class="content-area">
+        <div class="podcast-card">
+            <img src="pod_cast.png" alt="Capa: Podcast Periferia no Centro" class="cover-image">
+            
+            <div class="p-8 text-center">
+                <h2 class="text-3xl font-bold text-purple-800 mb-3">Periferia no Centro</h2>
+                <p class="text-gray-600 text-lg mb-4">
+                    Ouça este episódio especial perfeito para revisar as dinâmicas sociais e a transição demográfica a caminho da escola ou no intervalo. Dê o play e fortaleça seus estudos!
+                </p>
+
+                <div class="yt-audio-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/f9cIHXrNPy8?controls=1&showinfo=0&rel=0&modestbranding=1" 
+                        title="Podcast de Áudio" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>

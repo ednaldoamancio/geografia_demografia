@@ -1,79 +1,221 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Videoaula: Demografia</title>
+    <title>Podcast | Demografia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #fdf6fb; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            color: #333; 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+            min-height: 100vh;
         }
-        .nav-back { 
-            align-self: flex-start; 
-            margin-bottom: 20px; 
-            text-decoration: none; 
-            background: #8e44ad; 
-            color: white; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(142, 68, 173, 0.2);
-        }
-        .nav-back:hover { 
-            background: #732d91; 
-            transform: translateY(-2px);
-        }
-        .container { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 25px rgba(142, 68, 173, 0.1); 
-            max-width: 900px; 
-            width: 100%; 
-            box-sizing: border-box; 
-            text-align: center; 
-            border-top: 6px solid #8e44ad;
-        }
-        h1 { color: #8e44ad; margin-top: 0; font-size: 2em; }
-        p { color: #7f8c8d; margin-bottom: 25px; font-size: 1.1em;}
-        
-        .video-wrapper {
-            position: relative;
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
             width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            background: #000;
+            padding: 20px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #8e44ad;
+            position: relative;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 2em; }
+        .header p { font-size: 1.1em; color: #555; margin-top: 5px; font-weight: 500; }
+        
+        .btn-voltar {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: #8e44ad;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+        .btn-voltar:hover { color: #2c3e50; }
+        
+        @media (max-width: 768px) {
+            .btn-voltar { position: static; transform: none; display: inline-block; margin-bottom: 10px; }
+        }
+
+        .content-area {
+            width: 90%;
+            max-width: 800px;
+            margin: 40px 0;
         }
         
-        video { 
-            width: 100%; 
-            display: block;
-            outline: none; 
+        /* Player de Podcast Estilizado */
+        .podcast-player {
+            background: #1e1e1e;
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
+        .podcast-cover {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #8e44ad, #ff758c);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .podcast-info h2 { margin: 0 0 5px 0; font-size: 1.5rem; color: #fff; }
+        .podcast-info p { margin: 0 0 15px 0; color: #aaa; font-size: 0.95rem; }
+        
+        /* Controles Mockados (Apenas Visual por enquanto) */
+        .controls { display: flex; align-items: center; gap: 15px; color: #fff; font-size: 1.5rem; }
+        .play-btn { background: #84fab0; color: #1e1e1e; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: transform 0.2s; }
+        .play-btn:hover { transform: scale(1.1); }
+        .progress-bar { flex-grow: 1; height: 6px; background: #444; border-radius: 3px; position: relative; cursor: pointer; }
+        .progress-fill { width: 35%; height: 100%; background: #84fab0; border-radius: 3px; }
+
+        /* Área de Transcrição */
+        .transcript-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            border-top: 5px solid #ff758c;
+        }
+        .dialogue { margin-bottom: 20px; line-height: 1.6; }
+        .name-mila { color: #8e44ad; font-weight: bold; }
+        .name-beto { color: #3498db; font-weight: bold; }
+        .fx { color: #7f8c8d; font-style: italic; font-size: 0.9em; }
     </style>
 </head>
 <body>
-    <a href="index.html" class="nav-back">&#8592; Voltar ao Menu</a>
-    
-    <div class="container">
-        <h1>▶️ Videoaula: Dinâmica Populacional</h1>
-        <p>Aprofunde os seus conhecimentos assistindo a esta explicação visual sobre o comportamento e a estrutura da população.</p>
+
+    <header class="header">
+        <a href="index.html" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar ao Menu</a>
+        <h1>🎧 Podcast: GeoFofoca</h1>
+        <p>Aperte o play (ou leia a transcrição) para revisar demografia com muito humor!</p>
+    </header>
+
+    <div class="content-area">
         
-        <div class="video-wrapper">
-            <video controls>
-                <source src="video_demografia.mp4" type="video/mp4">
-                Seu navegador não suporta a tag de vídeo.
-            </video>
+        <div class="podcast-player flex-col md:flex-row">
+            <div class="podcast-cover">
+                🌍
+            </div>
+            <div class="podcast-info flex-grow w-full">
+                <h2>Ep. 01: O Babado da Demografia</h2>
+                <p>Host: Mila & Beto | Duração: 12 min</p>
+                <div class="flex items-center gap-4 w-full">
+                    <div class="play-btn" onclick="alert('Áudio em produção! Leia a transcrição abaixo.')">
+                        <i class="fas fa-play ml-1"></i>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <span class="text-sm text-gray-400">04:12 / 12:00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="transcript-card">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Transcrição do Episódio</h3>
+            
+            <p class="dialogue fx">[Efeito sonoro: Música de abertura animada, estilo lo-fi/hip-hop]</p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> Salve, salve, galera que tá na contagem regressiva pro Enem! Sejam muito bem-vindos ao <i>GeoFofoca</i>, o podcast onde a gente transforma a geografia naquele babado que você não esquece mais. Eu sou a Mila!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> E eu sou o Beto! E Mila, eu tô em choque. Fui estudar Demografia e descobri que ter um filho hoje em dia custa mais caro que uma Ferrari! Como assim, gente?
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> Calma, Beto! A gente já chega na parte do desespero financeiro. Mas antes, a gente precisa entender o básico da fofoca populacional. Por exemplo, você sabia que o Brasil é muito <b>populoso</b>, mas é pouco <b>povoado</b>?
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Ué, buguei. Populoso e povoado não é a mesma coisa? Tipo "muita gente"?
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> Erro clássico de vestibular, meu caro! <b>Populoso</b> tem a ver com a <i>População Absoluta</i>. O Brasil tem mais de 200 milhões de habitantes, somos o 6º país mais populoso do mundo. Já <b>Povoado</b> tem a ver com a <i>População Relativa</i>, a famosa densidade demográfica (habitantes por km²). Como o Brasil tem um território gigantesco, a nossa galera fica espalhada. É tipo festa no salão do condomínio vs. festa em kitnet!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Entendi! E me tira uma dúvida: o que é esse tal de <b>Crescimento Vegetativo</b>? É a população de veganos crescendo?
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> <i>(Risos)</i> Não, Beto! Crescimento Vegetativo é a diferença entre quem <i>nasceu</i> e quem <i>morreu</i>. Já o <b>Crescimento Demográfico</b> pega isso e soma com a galera do aeroporto: os imigrantes e emigrantes. Os EUA, por exemplo, têm crescimento vegetativo negativo (morre mais gente que nasce), mas a população cresce por causa dos imigrantes!
+            </p>
+
+            <p class="dialogue fx">[Efeito sonoro: Som de caixa registradora (Ka-ching!)]</p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Falando em nascer... O que é a <b>Taxa de Fecundidade</b> de 2,1 filhos? O que é 0,1 de uma criança? É o braço do menino?
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> <i>(Risos)</i> A taxa de reposição é 2 (substitui pai e mãe). O "0,1" entra na conta por causa da triste mortalidade infantil. Mas hoje, no Brasil, a taxa despencou. O professor Ricardo Marcílio deu a letra: o IBGE calculou que criar um filho custa de 800 mil a 1 milhão de reais!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Eu não tenho nem 800 reais na conta! Meu planejamento familiar vai ser adotar um cacto.
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> E não é só dinheiro. Tem o empoderamento feminino! Mulheres focando na carreira, uso de contraceptivos... Tudo isso muda a <b>Pirâmide Etária</b>. Aliás, o Brasil hoje tem a pirâmide em formato de <b>Coxinha</b>!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Pirâmide de Coxinha? Como assim? Deu fome.
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> A base (crianças) encolheu. O topo (idosos) tá alargando. E onde tá a parte mais gordinha da coxinha? No meio! Os adultos! Isso se chama <b>Bônus Demográfico</b>. É a hora do país enriquecer com tanta gente apta a trabalhar.
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Mas se a gente não enriquecer agora... quando ficarmos velhos e a pirâmide virar um barril, a previdência quebra. É a tal da <b>Fase 4 da Transição Demográfica</b>, que a Europa tá passando, né?
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> Isso! Nascem poucos, idosos vivem muito. Falta trabalhador. A solução óbvia seria aceitar imigrantes, mas aí esbarram na xenofobia. É um xadrez demográfico purinho!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Resumindo: Demografia é sobre dinheiro, trabalho, direitos das mulheres e treta internacional. Adorei!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-mila">Mila:</span> Essa é a pegada! Se você curtiu, não esquece de fazer o simulado e revisar os flashcards aqui no portal EdHumanas. Estudem pelas pirâmides, e se lembrem da coxinha!
+            </p>
+
+            <p class="dialogue">
+                <span class="name-beto">Beto:</span> Valeu! Vou ali regar meu cacto. Fui!
+            </p>
+
+            <p class="dialogue fx">[Efeito sonoro: Música sobe e finaliza]</p>
+
         </div>
     </div>
+
 </body>
 </html>
+
